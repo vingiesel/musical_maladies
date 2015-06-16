@@ -77,6 +77,40 @@ class ListInput extends React.Component{
 	}
 }
 
+class DropInput extends React.Component{
+	constructor (props){
+		super(props);
+		this.state = {current:props.default_answer};
+	}
+	onSelect = (e) => {
+		this.setState({current: e.target.value});
+	}
+	onSubmit = () => {
+		if (!this.state.current){
+			return;
+		}
+		this.props.submit(this.state.current);
+	}
+	render () {
+		var options = this.props.q.choices.map(function (item){
+			return <option key={item}>{item}</option>
+		}.bind(this));
+		return (
+			<Row>
+				<Col xs={12}>
+					<select defaultValue={this.state.current} onChange={this.onSelect}>
+						<option>...</option>
+						{options}
+					</select>
+				</Col>
+				<Col xs={12} className="seperate">
+					<Button onClick={this.onSubmit} disabled={!this.state.current}>Submit</Button>
+				</Col>
+			</Row>
+		)
+	}
+}
+
 class BoolInput extends React.Component{
 	yup = () => {
 		this.props.submit(true);
@@ -106,29 +140,17 @@ export default class QuestionPanel extends React.Component {
 		switch (this.props.q.type){
 			case Questions.types.NUMBER: input = <NumberInput submit={this.onAnswer} default_answer={this.props.saved} />;break;
 			case Questions.types.LIST: input = <ListInput submit={this.onAnswer} q={this.props.q}  default_answer={this.props.saved} />;break;
+			case Questions.types.DROP: input = <DropInput submit={this.onAnswer} q={this.props.q}  default_answer={this.props.saved} />;break;
 			case Questions.types.BOOL: input = <BoolInput submit={this.onAnswer}  default_answer={this.props.saved} />;break;
 		}
 		return (
-			<Col className="card" xs={12} sm={5}>
+			<Row className="card">
 				<Col xs={12}><strong>Question:</strong></Col>
 				<Col className="question_text" xs={12}>
-					{this.props.q.text}?
+					{this.props.q.text}
 				</Col>
 				{input}
-				{/*<Col xs={12}>
-					<Input type='radio' name='one' label='Radio' />
-					<Input type='radio' name='one' label='Radio' checked/>
-					<Input type='radio' name='one' label='Radio' />
-				</Col>
-				
-				<Col xs={12}>
-					<ButtonGroup>
-						<Button>True</Button>
-						<Button>False</Button>
-					</ButtonGroup>
-				</Col>*/}
-				
-			</Col>
+			</Row>
 		);
 	}
 }

@@ -20,7 +20,7 @@ export default class AnswerPanel extends React.Component {
 		return (
 			<Col onClick={this.handleClick} className="answer_holder" xs={12} sm={4} md={4}>
 				<Col xs={8}>
-					{text}?
+					{text}
 				</Col>
 				<Col xs={4}>
 					{answer}

@@ -71,3 +71,8 @@ body {
 /* line 71, app/styles/main.scss */
 .start_hidden {
   display: none; }
+
+/* line 75, app/styles/main.scss */
+.shrink_image {
+  max-width: 100%;
+  max-height: 100%; }

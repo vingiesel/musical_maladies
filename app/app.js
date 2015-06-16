@@ -15,7 +15,7 @@ import Diagnosis from 'app/diagnosis';
 class Base extends React.Component{
 	constructor (props) {
 		super(props)
-		this.state = {current_question: Question.list.g1, answers: [], saved_answer:null};
+		this.state = {current_question: Question.list[Question.first], answers: [], saved_answer:null};
 	}
 	onAnswer = (answer, question) => {
 		var answers = this.state.answers;
@@ -24,7 +24,7 @@ class Base extends React.Component{
 		this.setState({current_question: Question.list[next], answers:answers, saved_answer:null});
 	}
 	onRestart = () => {
-		this.setState({current_question: Question.list.g1, answers: [], saved_answer:null});
+		this.setState({current_question: Question.list[Question.first], answers: [], saved_answer:null});
 	}
 	onToggleHistory = () => {
 		var history = React.findDOMNode(this.refs.history);
@@ -51,16 +51,15 @@ class Base extends React.Component{
 		}
 	}
 	onSkip = () => {
-		// var answers = this.state.answers;
+		var answers = this.state.answers;
 		if(!this.state.current_question.mandatory){
 			var next = this.state.current_question.next(null, this.state.answers, true);
 			this.setState({current_question: Question.list[next], answers:answers, saved_answer:null});
 		}
 	}
 	render () {
-
 		var history_links = this.state.answers.map(function (item) {
-			return <AnswerPanel key={item.question.text} question={item.question} answer={item.answer} revert={this.onGoto}/>
+			return <AnswerPanel key={item.question.text+item.question.answer} question={item.question} answer={item.answer} revert={this.onGoto}/>
 		}, this);
 
 		var answers_dict = {}
@@ -76,9 +75,9 @@ class Base extends React.Component{
 			return item.check(answers_dict);
 		}).map(function (item){
 			return <DiagnosisPanel data={item} />
-		})
+		});
 
-		console.log(answers_dict);
+		console.log(this.state.current_question);
 
 		return (
 			<Grid className="background" fluid>
@@ -127,7 +126,25 @@ class Base extends React.Component{
 							</Col>
 						</Row>
 						<Row>
-							<QuestionPanel ref="question" q={this.state.current_question} saved={this.state.saved_answer} submit={this.onAnswer}/>
+							<Col xs={12} sm={5}>
+								<QuestionPanel ref="question" q={this.state.current_question} saved={this.state.saved_answer} submit={this.onAnswer}/>
+								{(this.state.current_question.section === Question.sections.MUSC)?
+								<Row className="card seperate">
+									<strong>Fry Scale:</strong>
+									<ul>
+										<li>Tier 1 – pain at one spot – while playing (regularly)</li>
+										<li>Tier 2 – pain at several spots while playing (regularly)</li>
+										<li>Tier 3 – Pain continues during ADL or rest</li>
+										<li>Tier 4 – All of the above but includes night, change in physical appearance and loss of motor function</li>
+										<li>Tier 5 – ADLs add to pain and little ability to complete tasks, continuous pain, obvious physical changes</li>
+									</ul>
+								</Row>:undefined}
+								{(this.state.current_question.image_url)?
+									<Row className="card seperate">
+										<img className="shrink_image" src={this.state.current_question.image_url}/>
+									</Row>
+								:undefined}
+							</Col>
 							<Col className="row_spacer visible-xs" xs={12}/>
 							<Col xs={12} smOffset={2} sm={5}>
 								<Row className="card" >
