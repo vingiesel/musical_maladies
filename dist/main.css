@@ -1,0 +1,81 @@
+/* line 3, app/styles/main.scss */
+body {
+  background-color: #EEEEEE; }
+
+/* line 6, app/styles/main.scss */
+.header {
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 5px 2px rgba(50, 50, 50, 0.25);
+  padding: 10px; }
+
+/* line 14, app/styles/main.scss */
+.content {
+  z-index: 8; }
+
+/* line 17, app/styles/main.scss */
+.commands {
+  margin-top: 20px;
+  margin-bottom: 20px; }
+
+/* line 21, app/styles/main.scss */
+.row_spacer {
+  height: 20px; }
+
+/* line 25, app/styles/main.scss */
+.row_spacer_small {
+  height: 10px; }
+
+/* line 29, app/styles/main.scss */
+.seperate {
+  margin-top: 10px; }
+
+/* line 33, app/styles/main.scss */
+.white {
+  color: white; }
+
+/* line 36, app/styles/main.scss */
+.card {
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.11);
+  padding: 1em;
+  z-index: 6; }
+
+/* line 44, app/styles/main.scss */
+.centered {
+  text-align: center; }
+
+/* line 47, app/styles/main.scss */
+.home_link {
+  color: #333333; }
+
+/* line 48, app/styles/main.scss */
+.home_link :visited {
+  color: #333333; }
+
+/* line 51, app/styles/main.scss */
+.question_text {
+  margin: 5px;
+  padding: 10px;
+  background-color: #EEEEEE;
+  border-radius: 10px;
+  -khtml-border-radius: 10px;
+  word-wrap: break-word; }
+
+/* line 62, app/styles/main.scss */
+.answer_holder {
+  margin: 5px;
+  padding: 10px;
+  background-color: #EEEEEE;
+  border-radius: 10px;
+  -khtml-border-radius: 10px;
+  word-wrap: break-word;
+  cursor: pointer; }
+
+/* line 74, app/styles/main.scss */
+.start_hidden {
+  display: none; }
+
+/* line 82, app/styles/main.scss */
+.shrink_image {
+  max-width: 100%;
+  max-height: 100%; }
