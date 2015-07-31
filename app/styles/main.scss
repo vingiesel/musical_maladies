@@ -56,6 +56,7 @@ body {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     -khtml-border-radius: 10px;
+    word-wrap:break-word;
 }
 
 .answer_holder {
@@ -66,10 +67,16 @@ body {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     -khtml-border-radius: 10px;
+    word-wrap:break-word;
+    cursor: pointer;
 }
 
 .start_hidden {
     display:none;
+}
+
+.history_stuff {
+    
 }
 
 .shrink_image{

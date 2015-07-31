@@ -10,7 +10,7 @@ export default class DiagnosisPanel extends React.Component {
 				<Col className="question_text" xs={12}>
 					{this.props.data.desc}
 				</Col>
-				<Col xs={12}><a href={this.props.data.link}>Read More</a></Col>
+				<Col xs={12}><a href={this.props.data.link} target="_blank">Read More</a></Col>
 			</Row>
 		);
 	}

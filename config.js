@@ -26,6 +26,7 @@ System.config({
     "lodash": "npm:lodash@3.9.3",
     "react": "npm:react@0.13.3",
     "react-bootstrap": "npm:react-bootstrap@0.24.0-alpha.0",
+    "store2": "npm:store2@2.3.0",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },

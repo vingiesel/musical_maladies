@@ -18,7 +18,7 @@ export default class AnswerPanel extends React.Component {
 			text = text.substr(0, 50) + " ... " + text.substr(text.length-50, text.length)
 		}
 		return (
-			<Col onClick={this.handleClick} className="answer_holder" xs={12} sm={4} md={4}>
+			<Col onClick={this.handleClick} className="answer_holder" xs={12} sm={6} md={4}>
 				<Col xs={8}>
 					{text}
 				</Col>

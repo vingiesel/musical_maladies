@@ -58,21 +58,24 @@ body {
   padding: 10px;
   background-color: #EEEEEE;
   border-radius: 10px;
-  -khtml-border-radius: 10px; }
+  -khtml-border-radius: 10px;
+  word-wrap: break-word; }
 
-/* line 61, app/styles/main.scss */
+/* line 62, app/styles/main.scss */
 .answer_holder {
   margin: 5px;
   padding: 10px;
   background-color: #EEEEEE;
   border-radius: 10px;
-  -khtml-border-radius: 10px; }
+  -khtml-border-radius: 10px;
+  word-wrap: break-word;
+  cursor: pointer; }
 
-/* line 71, app/styles/main.scss */
+/* line 74, app/styles/main.scss */
 .start_hidden {
   display: none; }
 
-/* line 75, app/styles/main.scss */
+/* line 82, app/styles/main.scss */
 .shrink_image {
   max-width: 100%;
   max-height: 100%; }

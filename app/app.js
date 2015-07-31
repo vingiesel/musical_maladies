@@ -4,6 +4,7 @@ var {Grid, Col, Row, Input, Button, ButtonGroup} = Bootstrap;
 
 import $ from 'jquery';
 import _ from 'lodash';
+import store from 'store2';
 
 import QuestionPanel from 'app/QuestionPanel';
 import AnswerPanel from 'app/AnswerPanel';
@@ -15,12 +16,39 @@ import Diagnosis from 'app/diagnosis';
 class Base extends React.Component{
 	constructor (props) {
 		super(props)
+
+		// var default_answers = store.get('history_answers', []);
+		// var default_start = store.get('history_start', Question.first) || Question.first;
+
+		// console.log(default_start)
+
 		this.state = {current_question: Question.list[Question.first], answers: [], saved_answer:null};
 	}
+
+
+	componentDidUpdate (){
+		// store.set('history_answers', this.state.answers);
+		// store.set('history_start', this.getQuestionName(this.state.current_question));
+
+		// console.log(this.getQuestionName(this.state.current_question));
+	}
+
+
 	onAnswer = (answer, question) => {
 		var answers = this.state.answers;
 		answers.push({answer:answer, question: question});
+
+		var answers_dict = this.makeAnswerDict(answers);
+
 		var next = question.next(answer, answers);
+		while (next !== "DONE"){
+			var current_question = Question.list[next];
+			if(current_question.mandatory || current_question.condition(answers)){
+				break;
+			}else{
+				var next = Question.list[next].next(null, answers, true);
+			}
+		}
 		this.setState({current_question: Question.list[next], answers:answers, saved_answer:null});
 	}
 	onRestart = () => {
@@ -57,27 +85,42 @@ class Base extends React.Component{
 			this.setState({current_question: Question.list[next], answers:answers, saved_answer:null});
 		}
 	}
-	render () {
-		var history_links = this.state.answers.map(function (item) {
-			return <AnswerPanel key={item.question.text+item.question.answer} question={item.question} answer={item.answer} revert={this.onGoto}/>
-		}, this);
-
+	// you want answers?
+	// I WANT THE TRUTH!
+	makeAnswerDict = (answers) => {
 		var answers_dict = {}
 		_.forEach(Question.list, function (q, name){
-			_.forEach(this.state.answers, function(answer){
+			_.forEach(answers, function(answer){
 				if (answer.question === q){
 					answers_dict[name] = answer.answer;
 				}
 			}, this);
 		}, this);
 
-		var diag_list = Diagnosis.filter(function (item){
-			return item.check(answers_dict);
-		}).map(function (item){
-			return <DiagnosisPanel data={item} />
-		});
+		return answers_dict;
+	}
 
-		console.log(this.state.current_question);
+	getQuestionName = (question) => {
+		return Object.keys(Question.list).filter(function(key) {return Question.list[key] === question})[0]
+	}
+
+	render () {
+		var history_links = this.state.answers.map(function (item) {
+			return <AnswerPanel key={item.question.text+item.question.answer} question={item.question} answer={item.answer} revert={this.onGoto}/>
+		}, this);
+
+		var answers_dict = this.makeAnswerDict(this.state.answers);
+
+		var diag_list = Diagnosis.filter(function (item){
+			if (item.custom){
+				return (item.custom(answers_dict) !== false);
+			}else{
+				return item.check(answers_dict);
+			}
+		}).map(function (item){
+			var data = item.custom?item.custom(answers_dict):item;
+			return <DiagnosisPanel data={data} />
+		});
 
 		return (
 			<Grid className="background" fluid>
@@ -116,10 +159,10 @@ class Base extends React.Component{
 									</Col>
 								</Row>
 								<Row ref="history" className="start_hidden">
-									<Col xsOffset={4} xs={4} onClick={this.onToggleHistory} className="centered">
+									<Col xs={12} onClick={this.onToggleHistory} className="centered">
 										<a href="javascript:void(0)"><i className="fa fa-chevron-left"/> Back</a>
 									</Col>
-									<Col xs={12}>
+									<Col xs={12} className="history_stuff">
 										{history_links}
 									</Col>
 								</Row>
