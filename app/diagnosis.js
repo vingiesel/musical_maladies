@@ -17,7 +17,7 @@ var Diagnosis = [
 			if (q.G2){
 				return {
 					name: q.G2 + " Player's Syndrome",
-					desc: "Diagnosis can also vary depending on custom logic. If you don't see the practical application for that, don't sweat it. I wouldn't expect a " + q.G1 + " year old " + q.G2 + " player to understand.",
+					desc: "Diagnosis can also vary depending on custom logic. This allows a diagnosis to vary depending on certain answers. Example: you are a " + q.G1 + " year old " + q.G2 + " player.",
 					link : '//www.google.com'
 				}
 			}

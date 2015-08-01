@@ -40,16 +40,21 @@ class Base extends React.Component{
 
 		var answers_dict = this.makeAnswerDict(answers);
 
-		var next = question.next(answer, answers);
+		var next = question.next(answer, answers_dict);
 		while (next !== "DONE"){
 			var current_question = Question.list[next];
-			if(current_question.mandatory || current_question.condition(answers)){
+			if(current_question.mandatory || current_question.condition(answers_dict)){
 				break;
 			}else{
 				var next = Question.list[next].next(null, answers, true);
 			}
 		}
-		this.setState({current_question: Question.list[next], answers:answers, saved_answer:null});
+
+		if (next === "DONE"){
+			this.setState({current_question: "DONE", answers:answers, saved_answer:null});
+		}else{
+			this.setState({current_question: Question.list[next], answers:answers, saved_answer:null});
+		}
 	}
 	onRestart = () => {
 		this.setState({current_question: Question.list[Question.first], answers: [], saved_answer:null});
@@ -170,8 +175,10 @@ class Base extends React.Component{
 						</Row>
 						<Row>
 							<Col xs={12} sm={5}>
-								<QuestionPanel ref="question" q={this.state.current_question} saved={this.state.saved_answer} submit={this.onAnswer}/>
-								{(this.state.current_question.section === Question.sections.MUSC)?
+								{this.state.current_question !== "DONE"?<QuestionPanel ref="question" q={this.state.current_question} saved={this.state.saved_answer} submit={this.onAnswer}/>
+								:
+								<Row className="card">All Done!</Row>}
+								{(this.state.current_question !== "DONE" && this.state.current_question.section === Question.sections.MUSC)?
 								<Row className="card seperate">
 									<strong>Fry Scale:</strong>
 									<ul>

@@ -75,7 +75,7 @@ var Woodwind=["Bassoon", "Oboe", "Bass Clarinet", "Bb Clarinet", "Flute", "Picco
 function does_play(list){
 	return function (answers) {
 		var pick = answers.G2;
-		_.forEach(pos, function(instrument){
+		_.forEach(list, function(instrument){
 			if (instrument === pick || pick.indexOf(instrument) !== -1){
 				return true;
 			}
@@ -87,7 +87,8 @@ function does_play(list){
 function doesnt_play(list){
 	return function (answers) {
 		var pick = answers.G2;
-		_.forEach(pos, function(instrument){
+		console.log(pick, answers);
+		_.forEach(list, function(instrument){
 			if (instrument === pick || pick.indexOf(instrument) !== -1){
 				return false;
 			}

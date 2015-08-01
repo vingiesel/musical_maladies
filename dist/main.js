@@ -27599,7 +27599,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 	function does_play(list) {
 		return function (answers) {
 			var pick = answers.G2;
-			_.forEach(pos, function (instrument) {
+			_.forEach(list, function (instrument) {
 				if (instrument === pick || pick.indexOf(instrument) !== -1) {
 					return true;
 				}
@@ -27611,7 +27611,8 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 	function doesnt_play(list) {
 		return function (answers) {
 			var pick = answers.G2;
-			_.forEach(pos, function (instrument) {
+			console.log(pick, answers);
+			_.forEach(list, function (instrument) {
 				if (instrument === pick || pick.indexOf(instrument) !== -1) {
 					return false;
 				}
@@ -28139,7 +28140,7 @@ System.register('app/diagnosis', ['app/questions'], function (_export) {
 					if (q.G2) {
 						return {
 							name: q.G2 + ' Player\'s Syndrome',
-							desc: 'Diagnosis can also vary depending on custom logic. If you don\'t see the practical application for that, don\'t sweat it. I wouldn\'t expect a ' + q.G1 + ' year old ' + q.G2 + ' player to understand.',
+							desc: 'Diagnosis can also vary depending on custom logic. This allows a diagnosis to vary depending on certain answers. Example: you are a ' + q.G1 + ' year old ' + q.G2 + ' player.',
 							link: '//www.google.com'
 						};
 					}
@@ -28600,16 +28601,21 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 
 						var answers_dict = _this.makeAnswerDict(answers);
 
-						var next = question.next(answer, answers);
+						var next = question.next(answer, answers_dict);
 						while (next !== 'DONE') {
 							var current_question = Question.list[next];
-							if (current_question.mandatory || current_question.condition(answers)) {
+							if (current_question.mandatory || current_question.condition(answers_dict)) {
 								break;
 							} else {
 								var next = Question.list[next].next(null, answers, true);
 							}
 						}
-						_this.setState({ current_question: Question.list[next], answers: answers, saved_answer: null });
+
+						if (next === 'DONE') {
+							_this.setState({ current_question: 'DONE', answers: answers, saved_answer: null });
+						} else {
+							_this.setState({ current_question: Question.list[next], answers: answers, saved_answer: null });
+						}
 					};
 
 					this.onRestart = function () {
@@ -28839,8 +28845,12 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 										React.createElement(
 											Col,
 											{ xs: 12, sm: 5 },
-											React.createElement(QuestionPanel, { ref: 'question', q: this.state.current_question, saved: this.state.saved_answer, submit: this.onAnswer }),
-											this.state.current_question.section === Question.sections.MUSC ? React.createElement(
+											this.state.current_question !== 'DONE' ? React.createElement(QuestionPanel, { ref: 'question', q: this.state.current_question, saved: this.state.saved_answer, submit: this.onAnswer }) : React.createElement(
+												Row,
+												{ className: 'card' },
+												'All Done!'
+											),
+											this.state.current_question !== 'DONE' && this.state.current_question.section === Question.sections.MUSC ? React.createElement(
 												Row,
 												{ className: 'card seperate' },
 												React.createElement(
