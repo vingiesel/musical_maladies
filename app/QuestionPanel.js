@@ -122,8 +122,8 @@ class BoolInput extends React.Component{
 		return (
 			<Col xs={12}>
 				<ButtonGroup>
-					<Button onClick={this.yup} primary={this.props.default_answer === true}>True</Button>
-					<Button onClick={this.nope} primary={this.props.default_answer === false}>False</Button>
+					<Button onClick={this.yup} primary={this.props.default_answer === true}>Yes</Button>
+					<Button onClick={this.nope} primary={this.props.default_answer === false}>No</Button>
 				</ButtonGroup>
 			</Col>
 		)

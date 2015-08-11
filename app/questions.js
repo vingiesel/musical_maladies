@@ -74,26 +74,34 @@ var Woodwind=["Bassoon", "Oboe", "Bass Clarinet", "Bb Clarinet", "Flute", "Picco
 
 function does_play(list){
 	return function (answers) {
-		var pick = answers.G2;
-		_.forEach(list, function(instrument){
-			if (instrument === pick || pick.indexOf(instrument) !== -1){
-				return true;
+		var all = [];
+		_.forEach(list, function (item){
+			if (typeof(item) === 'object'){
+				all = all.concat(item);
+			}
+			if (typeof(item) === 'string'){
+				all.push(item);
 			}
 		});
-		return false;
+		// var all = [].concat.apply([], list);
+		var pick = answers.G2;
+		return _.includes(all, pick);
 	}
 }
 
 function doesnt_play(list){
 	return function (answers) {
-		var pick = answers.G2;
-		console.log(pick, answers);
-		_.forEach(list, function(instrument){
-			if (instrument === pick || pick.indexOf(instrument) !== -1){
-				return false;
+		var all = [];
+		_.forEach(list, function (item){
+			if (typeof(item) === 'object'){
+				all = all.concat(item);
+			}
+			if (typeof(item) === 'string'){
+				all.push(item);
 			}
 		});
-		return true;
+		var pick = answers.G2;
+		return !_.includes(all, pick);
 	}
 }
 
@@ -101,9 +109,9 @@ function doesnt_play(list){
 
 var Questions = {
 	G1 : new NumberQuestion('How old are you?', sections.PRIMARY, 'G2'),
-	G2 : new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'G3'),
+	G2 : new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'M16'),
 	G3 : new ListQuestion("What is your gender?", sections.PRIMARY, ["Male", "Female"], 'G4'),
-	G4 : new BoolQuestion("Primarily play under conductor?", sections.PRIMARY, function (answer){
+	G4 : new BoolQuestion("Do you primarily play under conductor?", sections.PRIMARY, function (answer){
 			if (answer === true){
 				return 'G4_a';
 			}else{
@@ -201,7 +209,7 @@ var Questions = {
 	M13: new ListQuestion("(If Instrument = string or keyboard) Do you slam/squeeze the keys/strings even when playing softly?", sections.MUSCULAR, Freq, "M14", false, null, does_play([Strings, Keyboard])),	 
 	M14: new ListQuestion("Do you clench or grit your teeth while practicing/performing?", sections.MUSCULAR, Freq, "M15"),	 
 	M15: new ListQuestion("Do you maintain a back-to-back schedule of rehearsals, gigs, and performances?", sections.MUSCULAR, Freq, "M16"),
-	M16: new ListQuestion("(If Instrument = not percussion) Do you fling your fingers off of the strings or keys?", sections.MUSCULAR, Freq, "M17", false, null, doesnt_play([Percussion])),	 
+	M16: new ListQuestion("(If Instrument = not percussion) Do you fling your fingers off of the strings or keys?", sections.MUSCULAR, Freq, "M17", false, null, doesnt_play([Percussion, ])),	 
 	M17: new ListQuestion("(If Instrument = string or guitar) How tightly do you grip your bow or fingerboard?", sections.MUSCULAR, ["Enough to support it", "more than is needed to support it but not enough to feel strained", "enough to feel strained", "enough to cause white knuckles", "indentations on skin"], "M18", false, null, does_play([Strings, "Guitar"])),	 
 	M18: new ListQuestion("How often do you play without warming up?", sections.MUSCULAR, Freq, "M19"),	 
 	M19: new ListQuestion("(If instrument = string) Do you play with a heavy bow?", sections.MUSCULAR, Freq, "M20", false, null, does_play([Strings])),	 
@@ -211,9 +219,9 @@ var Questions = {
 	M23: new BoolQuestion("Do you hold fingers uplifted or curled (Picture)?", sections.MUSCULAR, function (answer){
 		return (answer === true)?"M23_a":"M24"}),
 	M23_a: new ListQuestion("How often?", sections.MUSCULAR, Freq, "M24"),	 
-	M24: new BoolQuestion("Do you hold stretches, double stops, or chords?", sections.MUSCULAR, Freq, "M25"),	 
+	M24: new BoolQuestion("Do you hold stretches, double stops, or chords?", sections.MUSCULAR, "M25"),	 
 	M25: new BoolQuestion("(If Instrument = string) Do you involve more than your lower arm when changing from downbow to upbow?", sections.MUSCULAR, function (answer){
-		return (answer === true)?"M25_a":"M26"}, false, null, does_play([String])),
+		return (answer === true)?"M25_a":"M26"}, false, null, does_play([Strings,])),
 	M25_a: new ListQuestion("How often?", sections.MUSCULAR, Freq, "M26"),
 	M26: new BoolQuestion("When you sit, do you feel stable?", sections.MUSCULAR, "M27"),	 
 	M27: new BoolQuestion("When sitting, do you sit on your “rockers”? (Picture)", sections.MUSCULAR, "M28"),	 
