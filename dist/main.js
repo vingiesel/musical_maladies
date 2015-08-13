@@ -27598,26 +27598,34 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 
 	function does_play(list) {
 		return function (answers) {
-			var pick = answers.G2;
-			_.forEach(list, function (instrument) {
-				if (instrument === pick || pick.indexOf(instrument) !== -1) {
-					return true;
+			var all = [];
+			_.forEach(list, function (item) {
+				if (typeof item === 'object') {
+					all = all.concat(item);
+				}
+				if (typeof item === 'string') {
+					all.push(item);
 				}
 			});
-			return false;
+			// var all = [].concat.apply([], list);
+			var pick = answers.G2;
+			return _.includes(all, pick);
 		};
 	}
 
 	function doesnt_play(list) {
 		return function (answers) {
-			var pick = answers.G2;
-			console.log(pick, answers);
-			_.forEach(list, function (instrument) {
-				if (instrument === pick || pick.indexOf(instrument) !== -1) {
-					return false;
+			var all = [];
+			_.forEach(list, function (item) {
+				if (typeof item === 'object') {
+					all = all.concat(item);
+				}
+				if (typeof item === 'string') {
+					all.push(item);
 				}
 			});
-			return true;
+			var pick = answers.G2;
+			return !_.includes(all, pick);
 		};
 	}
 
@@ -27742,9 +27750,9 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 			Woodwind = ['Bassoon', 'Oboe', 'Bass Clarinet', 'Bb Clarinet', 'Flute', 'Piccolo', 'Flute and Piccolo', 'Bagpipes', 'Saxophone'];
 			Questions = {
 				G1: new NumberQuestion('How old are you?', sections.PRIMARY, 'G2'),
-				G2: new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'G3'),
+				G2: new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'M16'),
 				G3: new ListQuestion('What is your gender?', sections.PRIMARY, ['Male', 'Female'], 'G4'),
-				G4: new BoolQuestion('Primarily play under conductor?', sections.PRIMARY, function (answer) {
+				G4: new BoolQuestion('Do you primarily play under conductor?', sections.PRIMARY, function (answer) {
 					if (answer === true) {
 						return 'G4_a';
 					} else {
@@ -27822,13 +27830,13 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 
 				M1: new BoolQuestion('When standing at rest, do your arms rest at your side or forward (on your thighs)? (Pictures)', sections.MUSCULAR, 'M2'),
 				M2: new BoolQuestion('When standing at rest, do your hands face backward or toward each other? (Pictures)', sections.MUSCULAR, 'M3'),
-				M3: new BoolQuestion('Do you experience pain and/or a burning sensation in your hand/wrist/forearm/elbow/upperarm/shoulder/neck/upperback/midback/lowerback/thighs/knees/lower legs/ankles/feet/jaw/embouchure/joints?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M3_a' : 'M4';
+				M3: new DropQuestion('Do you experience pain and/or a burning sensation in your:', sections.MUSCULAR, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure', 'joints', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'M3_a' : 'M4';
 				}),
 				M3_a: new ListQuestion('In which tier would you place your pain?', sections.MUSCULAR, FryScale, 'M4'),
 				M4: new BoolQuestion('Do you experience a sense of fatigue or heaviness much more quickly than has happened in the past?', sections.MUSCULAR, 'M5'),
-				M5: new BoolQuestion('Would you describe yourself as having stiffness in your hand/wrist/forearm/elbow/upperarm/shoulder/neck/upperback/midback/lowerback/thighs/knees/lower legs/ankles/feet/jaw/embouchure?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M5_a' : 'M6';
+				M5: new DropQuestion('Would you describe yourself as having stiffness in your:', sections.MUSCULAR, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'M5_a' : 'M6';
 				}),
 				M5_a: new ListQuestion('In which tier would you place your pain?', sections.MUSCULAR, FryScale, 'M6'),
 				M6: new BoolQuestion('Have you noticed a decreased ability to complete or enjoy your Activities of Daily Living (day-to-day activities and responsibilities – non-musical)?', sections.MUSCULAR, function (answer) {
@@ -27855,31 +27863,31 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 					return answer === true ? 'M23_a' : 'M24';
 				}),
 				M23_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M24'),
-				M24: new BoolQuestion('Do you hold stretches, double stops, or chords?', sections.MUSCULAR, Freq, 'M25'),
+				M24: new BoolQuestion('Do you hold stretches, double stops, or chords?', sections.MUSCULAR, 'M25'),
 				M25: new BoolQuestion('(If Instrument = string) Do you involve more than your lower arm when changing from downbow to upbow?', sections.MUSCULAR, function (answer) {
 					return answer === true ? 'M25_a' : 'M26';
-				}, false, null, does_play([String])),
+				}, false, null, does_play([Strings])),
 				M25_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M26'),
 				M26: new BoolQuestion('When you sit, do you feel stable?', sections.MUSCULAR, 'M27'),
 				M27: new BoolQuestion('When sitting, do you sit on your “rockers”? (Picture)', sections.MUSCULAR, 'M28'),
-				M28: new BoolQuestion('Do you hold your neck tilted/rotated/cocked forward/cocked down (Pictures)?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M28_a' : 'M29';
+				M28: new DropQuestion('Do you hold your neck: (Pictures)?', sections.MUSCULAR, ['tilted', 'rotated', 'cocked forward', 'cocked down', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'M28_a' : 'M29';
 				}),
 				M28_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M29'),
-				M29: new BoolQuestion('Do you hold your torso bent/twisted/leaning forward/leaning back (Pictures)?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M29_a' : 'M30';
+				M29: new DropQuestion('Do you hold your torso: (Pictures)?', sections.MUSCULAR, ['bent', 'twisted', 'leaning forward', 'leaning back', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'M29_a' : 'M30';
 				}),
 				M29_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M30'),
-				M30: new BoolQuestion('Do you hold your wrist deviated/lifted/dropped (Pictures)?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M30_a' : 'M31';
+				M30: new DropQuestion('Do you hold your wrist: (Pictures)?', sections.MUSCULAR, ['deviated', 'lifted', 'dropped', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'M30_a' : 'M31';
 				}),
 				M30_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M31'),
-				M31: new BoolQuestion('Do you hold your shoulders lifted/twisted/rolled forward (Pictures)?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M31_a' : 'M32';
+				M31: new DropQuestion('Do you hold your shoulders: (Pictures)?', sections.MUSCULAR, ['lifted', 'twisted', 'rolled forward', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'M31_a' : 'M32';
 				}),
 				M31_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M32'),
-				M32: new BoolQuestion('Do you hold your thumbs such that they are constantly squeezing/gripping/pinching/or angled (Pictures)?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M32_a' : 'M33';
+				M32: new DropQuestion('Do you hold your thumbs such that they are constantly: (Pictures)?', sections.MUSCULAR, ['squeezing', 'gripping', 'pinching', 'angled', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'M32_a' : 'M33';
 				}),
 				M32_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M33'),
 				M33: new BoolQuestion('Do you sit or stand immobile for long periods of time?', sections.MUSCULAR, function (answer) {
@@ -27889,19 +27897,19 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				M35: new BoolQuestion('Do you experience several points of pain?', sections.MUSCULAR, function (answer) {
 					return answer === true ? 'M35_a' : 'M36';
 				}),
-				M35_a: new ListQuestion('How many?', sections.MUSCULAR, ('1-5', '5-9', '10-15', '15+', 'I hurt all over'), 'M36'),
+				M35_a: new ListQuestion('How many?', sections.MUSCULAR, ['1-5', '5-9', '10-15', '15+', 'I hurt all over'], 'M36'),
 				M36: new BoolQuestion('Would you characterize your pain as a deep muscular ache, stiffness, or soreness?', sections.MUSCULAR, 'M37'),
 				M37: new BoolQuestion('Are you double jointed/have very flexible joints?', sections.MUSCULAR, 'N1'),
 
-				N1: new BoolQuestion('Do you ever experience involuntary movement of your fingers/hand/wrist/arm/mouth/embouchure?', sections.NEURAL, function (answer) {
-					return answer === true ? 'N1_a' : 'N2';
+				N1: new DropQuestion('Do you ever experience involuntary movement of your:', sections.NEURAL, ['fingers', 'hand', 'wrist', 'arm', 'mouth', 'embouchure', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'N1_a' : 'N2';
 				}),
 
 				N1_a: new ListQuestion('How Often?', sections.NEURAL, ['When I play', 'Practice, for up to 30 minutes after I play', 'practice, constantly'], 'N2'),
 
 				N2: new BoolQuestion('Have you noticed yourself becoming clumsier?', sections.NEURAL, 'N3'),
-				N3: new BoolQuestion('Do you experience tingling or numbness in your hand/wrist/forearm/elbow/upperarm/shoulder/neck/upperback/midback/lowerback/thighs/knees/lower legs/ankles/feet/jaw/embouchure?', sections.NEURAL, function (answer) {
-					return answer === true ? 'N3_a' : 'N4';
+				N3: new DropQuestion('Do you experience tingling or numbness in your:', sections.NEURAL, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure', 'none of the above'], function (answer) {
+					return answer !== 'none of the above' ? 'N3_a' : 'N4';
 				}),
 
 				N3_a: new ListQuestion('How Often?', sections.NEURAL, ['When I play', 'Practice, for up to 30 minutes after I play', 'practice, constantly'], 'N4'),
@@ -27954,7 +27962,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				N14: new BoolQuestion('Have you noticed lumps (not including muscular “knots”) on your wrists or fingers?', sections.NEURAL, 'N15'),
 				N15: new BoolQuestion('Have you noticed that shaking your hands freely (similar to trying to fling water off of your hands) relieves pain?', sections.NEURAL, 'DONE') };
 
-			_export('default', { list: Questions, first: 'G1', types: qtypes, sections: sections, instruments: instrument_list, instrument_type: {
+			_export('default', { list: Questions, first: 'M1', types: qtypes, sections: sections, instruments: instrument_list, instrument_type: {
 					Percussion: Percussion,
 					Strings: Strings,
 					Keyboard: Keyboard,
@@ -28022,13 +28030,17 @@ System.register('app/AnswerPanel', ['npm:babel-runtime@5.4.7/helpers/inherits', 
 							{ onClick: this.handleClick, className: 'answer_holder', xs: 12, sm: 6, md: 4 },
 							React.createElement(
 								Col,
-								{ xs: 8 },
-								text
-							),
-							React.createElement(
-								Col,
-								{ xs: 4 },
-								answer
+								{ xs: 12, className: 'inside' },
+								React.createElement(
+									Col,
+									{ xs: 7 },
+									text
+								),
+								React.createElement(
+									Col,
+									{ xs: 5 },
+									answer
+								)
 							)
 						);
 					}
@@ -28375,7 +28387,11 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 					_get(Object.getPrototypeOf(DropInput.prototype), 'constructor', this).call(this, props);
 
 					this.onSelect = function (e) {
-						_this3.setState({ current: e.target.value });
+						if (e.target.value === '...') {
+							_this3.setState({ current: null });
+						} else {
+							_this3.setState({ current: e.target.value });
+						}
 					};
 
 					this.onSubmit = function () {
@@ -28407,8 +28423,8 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 								Col,
 								{ xs: 12 },
 								React.createElement(
-									'select',
-									{ defaultValue: this.state.current, onChange: this.onSelect },
+									Input,
+									{ className: 'question_select', type: 'select', defaultValue: this.state.current, onChange: this.onSelect },
 									React.createElement(
 										'option',
 										null,
@@ -28466,12 +28482,12 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 								React.createElement(
 									Button,
 									{ onClick: this.yup, primary: this.props.default_answer === true },
-									'True'
+									'Yes'
 								),
 								React.createElement(
 									Button,
 									{ onClick: this.nope, primary: this.props.default_answer === false },
-									'False'
+									'No'
 								)
 							)
 						);
@@ -28515,7 +28531,7 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 						}
 						return React.createElement(
 							Row,
-							{ className: 'card' },
+							{ key: JSON.stringify(this.props.q), className: 'card' },
 							React.createElement(
 								Col,
 								{ xs: 12 },
@@ -28692,8 +28708,10 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 				}, {
 					key: 'render',
 					value: function render() {
+						var counter = 0;
 						var history_links = this.state.answers.map(function (item) {
-							return React.createElement(AnswerPanel, { key: item.question.text + item.question.answer, question: item.question, answer: item.answer, revert: this.onGoto });
+							counter += 1; // basically, order isn't important.
+							return React.createElement(AnswerPanel, { key: counter, question: item.question, answer: item.answer, revert: this.onGoto });
 						}, this);
 
 						var answers_dict = this.makeAnswerDict(this.state.answers);
@@ -28706,7 +28724,7 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 							}
 						}).map(function (item) {
 							var data = item.custom ? item.custom(answers_dict) : item;
-							return React.createElement(DiagnosisPanel, { data: data });
+							return React.createElement(DiagnosisPanel, { key: JSON.stringify(data), data: data });
 						});
 
 						return React.createElement(
@@ -28845,12 +28863,12 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 										React.createElement(
 											Col,
 											{ xs: 12, sm: 5 },
-											this.state.current_question !== 'DONE' ? React.createElement(QuestionPanel, { ref: 'question', q: this.state.current_question, saved: this.state.saved_answer, submit: this.onAnswer }) : React.createElement(
+											this.state.current_question !== 'DONE' ? React.createElement(QuestionPanel, { key: this.state.current_question, ref: 'question', q: this.state.current_question, saved: this.state.saved_answer, submit: this.onAnswer }) : React.createElement(
 												Row,
 												{ className: 'card' },
 												'All Done!'
 											),
-											this.state.current_question !== 'DONE' && this.state.current_question.section === Question.sections.MUSC ? React.createElement(
+											this.state.current_question !== 'DONE' && this.state.current_question.section === Question.sections.MUSCULAR ? React.createElement(
 												Row,
 												{ className: 'card seperate' },
 												React.createElement(
