@@ -304,7 +304,7 @@ var Questions = {
 	N15: new BoolQuestion('Have you noticed that shaking your hands freely (similar to trying to fling water off of your hands) relieves pain?', sections.NEURAL, 'DONE'),
 }
 
-export default {list : Questions, first: 'M28', types: qtypes, sections: sections, instruments: instrument_list, instrument_type: 
+export default {list : Questions, first: 'M1', types: qtypes, sections: sections, instruments: instrument_list, instrument_type: 
 	{
 		Percussion : Percussion,
 		Strings : Strings,

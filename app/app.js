@@ -180,7 +180,7 @@ class Base extends React.Component{
 								{this.state.current_question !== "DONE"?<QuestionPanel key={this.state.current_question} ref="question" q={this.state.current_question} saved={this.state.saved_answer} submit={this.onAnswer}/>
 								:
 								<Row className="card">All Done!</Row>}
-								{(this.state.current_question !== "DONE" && this.state.current_question.section === Question.sections.MUSC)?
+								{(this.state.current_question !== "DONE" && this.state.current_question.section === Question.sections.MUSCULAR)?
 								<Row className="card seperate">
 									<strong>Fry Scale:</strong>
 									<ul>
