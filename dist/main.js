@@ -27962,7 +27962,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				N14: new BoolQuestion('Have you noticed lumps (not including muscular “knots”) on your wrists or fingers?', sections.NEURAL, 'N15'),
 				N15: new BoolQuestion('Have you noticed that shaking your hands freely (similar to trying to fling water off of your hands) relieves pain?', sections.NEURAL, 'DONE') };
 
-			_export('default', { list: Questions, first: 'M1', types: qtypes, sections: sections, instruments: instrument_list, instrument_type: {
+			_export('default', { list: Questions, first: 'G1', types: qtypes, sections: sections, instruments: instrument_list, instrument_type: {
 					Percussion: Percussion,
 					Strings: Strings,
 					Keyboard: Keyboard,

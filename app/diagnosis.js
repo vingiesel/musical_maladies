@@ -51,7 +51,7 @@ var Diagnosis = [
 
 	{
 		name : 'I Dunno',
-		desc : 'Bacon ipsum dolor amet frankfurter prosciutto t-bone biltong spare ribs, picanha sausage tri-tip. Jowl jerky turducken bacon drumstick ham hock porchetta, tongue chuck. Sirloin pork chop ground round frankfurter, cow biltong cupim ball tip salami sausage tri-tip picanha. Picanha bresaola ham hock short ribs alcatra beef, swine porchetta ribeye pork chop tri-tip brisket pork belly. Kielbasa short ribs tail ham hock strip steak ribeye. Sirloin pancetta corned beef tongue bacon spare ribs.',
+		desc : 'Bacon ipsum dolor amet frankfurter prosciutto t&ndashbone biltong spare ribs, picanha sausage tri&ndashtip. Jowl jerky turducken bacon drumstick ham hock porchetta, tongue chuck. Sirloin pork chop ground round frankfurter, cow biltong cupim ball tip salami sausage tri&ndashtip picanha. Picanha bresaola ham hock short ribs alcatra beef, swine porchetta ribeye pork chop tri&ndashtip brisket pork belly. Kielbasa short ribs tail ham hock strip steak ribeye. Sirloin pancetta corned beef tongue bacon spare ribs.',
 		link : '//www.google.com',
 		check : function (q){
 			if (typeof(q.G4) !== 'undefined'){
