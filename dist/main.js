@@ -27742,15 +27742,15 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 
 			FryScale = ['Tier 1', 'Tier 2', 'Tier 3', 'Tier 4', 'Tier 5'];
 			Freq = ['Rarely', 'Occasionally', 'Frequently', 'Always'];
-			instrument_list = ['Piano', 'Harpsichord', 'Pianoforte', 'Percussion – Mallet focus', 'Percussion – all', 'Tuba', 'Trombone', 'Euphonium/Baritone', 'Trumpet', 'French Horn', 'Bassoon', 'Oboe', 'Bass Clarinet', 'Bb Clarinet', 'Flute', 'Piccolo', 'Flute and Piccolo', 'Violin', 'Viola', 'Cello', 'Double-Bass', 'Voice', 'Organ', 'Saxophone', 'Bagpipes', 'Guitar', 'Conductor'];
-			Percussion = ['Percussion – Mallet focus', 'Percussion – all'];
+			instrument_list = ['Piano', 'Harpsichord', 'Pianoforte', 'Percussion - Mallet focus', 'Percussion - all', 'Tuba', 'Trombone', 'Euphonium/Baritone', 'Trumpet', 'French Horn', 'Bassoon', 'Oboe', 'Bass Clarinet', 'Bb Clarinet', 'Flute', 'Piccolo', 'Flute and Piccolo', 'Violin', 'Viola', 'Cello', 'Double-Bass', 'Voice', 'Organ', 'Saxophone', 'Bagpipes', 'Guitar', 'Conductor'];
+			Percussion = ['Percussion - Mallet focus', 'Percussion - all'];
 			Strings = ['Violin', 'Viola', 'Cello', 'Double-Bass'];
 			Keyboard = ['Piano', 'Harpsichord', 'Pianoforte', 'Organ'];
 			Brass = ['Tuba', 'Trombone', 'Euphonium/Baritone', 'Trumpet', 'French Horn'];
 			Woodwind = ['Bassoon', 'Oboe', 'Bass Clarinet', 'Bb Clarinet', 'Flute', 'Piccolo', 'Flute and Piccolo', 'Bagpipes', 'Saxophone'];
 			Questions = {
 				G1: new NumberQuestion('How old are you?', sections.PRIMARY, 'G2'),
-				G2: new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'M16'),
+				G2: new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'G3'),
 				G3: new ListQuestion('What is your gender?', sections.PRIMARY, ['Male', 'Female'], 'G4'),
 				G4: new BoolQuestion('Do you primarily play under conductor?', sections.PRIMARY, function (answer) {
 					if (answer === true) {
@@ -27807,7 +27807,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				Q7: new BoolQuestion('Does the pain go away when you cease playing?', sections.QUAL, 'H1'),
 
 				H1: new BoolQuestion('Do normal sounds (turning on a car, shutting a door) seem unbearably loud?', sections.HEARING, 'H2'),
-				H2: new BoolQuestion('Do you sense a heightened sensitivity to certain frequencies/timbres – even if they aren’t loud?', sections.HEARING, function (answer) {
+				H2: new BoolQuestion('Do you sense a heightened sensitivity to certain frequencies/timbres - even if they aren’t loud?', sections.HEARING, function (answer) {
 					if (answer === true) {
 						return 'H2_a';
 					}
@@ -27839,7 +27839,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 					return answer !== 'none of the above' ? 'M5_a' : 'M6';
 				}),
 				M5_a: new ListQuestion('In which tier would you place your pain?', sections.MUSCULAR, FryScale, 'M6'),
-				M6: new BoolQuestion('Have you noticed a decreased ability to complete or enjoy your Activities of Daily Living (day-to-day activities and responsibilities – non-musical)?', sections.MUSCULAR, function (answer) {
+				M6: new BoolQuestion('Have you noticed a decreased ability to complete or enjoy your Activities of Daily Living (day-to-day activities and responsibilities - non-musical)?', sections.MUSCULAR, function (answer) {
 					return answer === true ? 'M6_a' : 'M7';
 				}),
 				M6_a: new ListQuestion('Would you say your decrease as been', sections.MUSCULAR, ['slight', 'moderate', 'severe'], 'M7'),
@@ -28882,27 +28882,27 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 													React.createElement(
 														'li',
 														null,
-														'Tier 1 – pain at one spot – while playing (regularly)'
+														'Tier 1 - pain at one spot - while playing (regularly)'
 													),
 													React.createElement(
 														'li',
 														null,
-														'Tier 2 – pain at several spots while playing (regularly)'
+														'Tier 2 - pain at several spots while playing (regularly)'
 													),
 													React.createElement(
 														'li',
 														null,
-														'Tier 3 – Pain continues during ADL or rest'
+														'Tier 3 - Pain continues during ADL or rest'
 													),
 													React.createElement(
 														'li',
 														null,
-														'Tier 4 – All of the above but includes night, change in physical appearance and loss of motor function'
+														'Tier 4 - All of the above but includes night, change in physical appearance and loss of motor function'
 													),
 													React.createElement(
 														'li',
 														null,
-														'Tier 5 – ADLs add to pain and little ability to complete tasks, continuous pain, obvious physical changes'
+														'Tier 5 - ADLs add to pain and little ability to complete tasks, continuous pain, obvious physical changes'
 													)
 												)
 											) : undefined,
