@@ -83,7 +83,12 @@ class DropInput extends React.Component{
 		this.state = {current:props.default_answer};
 	}
 	onSelect = (e) => {
-		this.setState({current: e.target.value});
+		if(e.target.value === "..."){
+			this.setState({current:null});
+		}
+		else{
+			this.setState({current: e.target.value});
+		}
 	}
 	onSubmit = () => {
 		if (!this.state.current){
@@ -98,10 +103,10 @@ class DropInput extends React.Component{
 		return (
 			<Row>
 				<Col xs={12}>
-					<select defaultValue={this.state.current} onChange={this.onSelect}>
-						<option>...</option>
+					<Input className="question_select" type='select' defaultValue={this.state.current} onChange={this.onSelect}>
+      					<option>...</option>
 						{options}
-					</select>
+      				</Input>
 				</Col>
 				<Col xs={12} className="seperate">
 					<Button onClick={this.onSubmit} disabled={!this.state.current}>Submit</Button>
@@ -144,7 +149,7 @@ export default class QuestionPanel extends React.Component {
 			case Questions.types.BOOL: input = <BoolInput submit={this.onAnswer}  default_answer={this.props.saved} />;break;
 		}
 		return (
-			<Row className="card">
+			<Row key={JSON.stringify(this.props.q)} className="card">
 				<Col xs={12}><strong>Question:</strong></Col>
 				<Col className="question_text" xs={12}>
 					{this.props.q.text}

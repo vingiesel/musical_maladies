@@ -110,8 +110,10 @@ class Base extends React.Component{
 	}
 
 	render () {
+		var counter = 0;
 		var history_links = this.state.answers.map(function (item) {
-			return <AnswerPanel key={item.question.text+item.question.answer} question={item.question} answer={item.answer} revert={this.onGoto}/>
+			counter += 1; // basically, order isn't important.
+			return <AnswerPanel key={counter} question={item.question} answer={item.answer} revert={this.onGoto}/>
 		}, this);
 
 		var answers_dict = this.makeAnswerDict(this.state.answers);
@@ -124,7 +126,7 @@ class Base extends React.Component{
 			}
 		}).map(function (item){
 			var data = item.custom?item.custom(answers_dict):item;
-			return <DiagnosisPanel data={data} />
+			return <DiagnosisPanel key={JSON.stringify(data)} data={data} />
 		});
 
 		return (
@@ -175,7 +177,7 @@ class Base extends React.Component{
 						</Row>
 						<Row>
 							<Col xs={12} sm={5}>
-								{this.state.current_question !== "DONE"?<QuestionPanel ref="question" q={this.state.current_question} saved={this.state.saved_answer} submit={this.onAnswer}/>
+								{this.state.current_question !== "DONE"?<QuestionPanel key={this.state.current_question} ref="question" q={this.state.current_question} saved={this.state.saved_answer} submit={this.onAnswer}/>
 								:
 								<Row className="card">All Done!</Row>}
 								{(this.state.current_question !== "DONE" && this.state.current_question.section === Question.sections.MUSC)?
