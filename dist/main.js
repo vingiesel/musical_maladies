@@ -28142,52 +28142,6 @@ System.register('app/diagnosis', ['app/questions', 'npm:lodash@3.9.3'], function
 		}],
 		execute: function () {
 			Diagnosis = [{
-				name: 'This is an Example Diagnostic',
-				desc: 'Right now, it is triggered by the first answer being answered. Diagnosis are checked against all current answers and show up in this list when custom criteria are met',
-				link: '//www.google.com',
-				check: function check(q) {
-					if (q.G1) {
-						return true;
-					}
-					return false;
-				} }, {
-				custom: function custom(q) {
-					if (q.G2) {
-						return {
-							name: q.G2 + ' Player\'s Syndrome',
-							desc: 'Diagnosis can also vary depending on custom logic. This allows a diagnosis to vary depending on certain answers. Example: you are a ' + q.G1 + ' year old ' + q.G2 + ' player.',
-							link: '//www.google.com'
-						};
-					}
-					return false;
-				} }, {
-				name: 'Hah, no you\'re not!',
-				desc: 'Nice try.',
-				link: '//www.google.com',
-				check: function check(q) {
-					if (q.G3 === 'Female') {
-						return true;
-					}
-					return false;
-				} }, {
-				name: 'See the thing up near the top?',
-				desc: 'Opening the history menu and selecting a question will take you back to that question. Go ahead, change some answers around.',
-				link: '//www.google.com',
-				check: function check(q) {
-					if (q.G3 === 'Male') {
-						return true;
-					}
-					return false;
-				} }, {
-				name: 'I Dunno',
-				desc: 'Bacon ipsum dolor amet frankfurter prosciutto t-bone biltong spare ribs, picanha sausage tri-tip. Jowl jerky turducken bacon drumstick ham hock porchetta, tongue chuck. Sirloin pork chop ground round frankfurter, cow biltong cupim ball tip salami sausage tri-tip picanha. Picanha bresaola ham hock short ribs alcatra beef, swine porchetta ribeye pork chop tri-tip brisket pork belly. Kielbasa short ribs tail ham hock strip steak ribeye. Sirloin pancetta corned beef tongue bacon spare ribs.',
-				link: '//www.google.com',
-				check: function check(q) {
-					if (typeof q.G4 !== 'undefined') {
-						return true;
-					}
-					return false;
-				} }, {
 				name: 'NIHL',
 				desc: 'NIHL',
 				link: '//en.wikipedia.org/wiki/Noise-induced_hearing_loss',
