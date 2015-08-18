@@ -1,5 +1,7 @@
 import Question from 'app/questions';
 
+import _ from 'lodash';
+
 var Diagnosis = [
 	{
 		name : 'This is an Example Diagnostic',
@@ -61,41 +63,134 @@ var Diagnosis = [
 		},
 	},
 
-	// {
-	// 	// NIHL
-	// 	// If H3 and H4 = Yes
-	// 	// If Instrument = Percussion, age <50 and (2+) of H6-12 = Yes
-	// 	// If Instrument = Brass, age <50 and (3+) of H6-12 = Yes
-	// 	// If Instrument = Keyboard, age <50 and (4+) of H6-12 = Yes
-	// 	// If Instrument = Woodwind, age <50 and (5+) of H6-12 = Yes
-	// 	// If Instrument = String, age <50 and (6+) of H6-12 = Yes
+	{
+		name: 'NIHL',
+		desc: 'NIHL',
+		link : '//en.wikipedia.org/wiki/Noise-induced_hearing_loss',
+		custom : function (q){
+			var certain = 0;
 
-	// 	// If only (1) of H3 and H4 = redirect to likely corresponding to instrument
-	// 	// If less than the required threshold of (Yes) are met = redirect to a “unlikely but possible” page
-	// 	// If thresholds are met but age >50 = redirect to a “NIHL but maybe Age” page
+			if (q.H3 && q.H4){
+				certain = 2;
+			}
+			else if (q.H3 || q.H4) {
+				certain = 1;
+			}
+			var h612 = 0;
+			_.forEach(['H6', 'H7', 'H8', 'H9', 'H10', 'H11', 'H12'], function (question){
+				if (q[question] === true){
+					h612 += 1;
+				}
+			});
 
-	// 	name: "NIHL",
-	// 	desc: "Something about NIHL, or maybe age",
-	// 	link : '//www.google.com',
-	// 	custom : function (q){
-	// 		console.log()
-	// 		if (q.h3 && q.h4){
-	// 			return true;
-	// 		}
+			var meets_threshold = false;
 
-	// 		var h612 = 0;
-	// 		for (var i=6; i <= 12;i++){
-	// 			if (q["h"+i] === true){
-	// 				h612 += 1;
-	// 			}
-	// 		}
+			if (_.includes(Question.instrument_type.Percussion, q.G2)){
+				if (h612 >= 2){
+					meets_threshold = true;
+				}
+			} else if(_.includes(Question.instrument_type.Brass, q.G2)){
+				if (h612 >= 3){
+					meets_threshold = true;
+				}
+			} else if(_.includes(Question.instrument_type.Keyboard, q.G2)){
+				if (h612 >= 4){
+					meets_threshold = true;
+				}
+			} else if(_.includes(Question.instrument_type.Woodwind, q.G2)){
+				if (h612 >= 5){
+					meets_threshold = true;
+				}
+			} else if(_.includes(Question.instrument_type.Strings, q.G2)){
+				if (h612 >= 6){
+					meets_threshold = true;
+				}
+			}
 
-	// 		if(Question.instrument_type.Percussion.indexOf(q.g2) !== -1 && q.g1 < 50){
+			if (certain === 2){
+				// General NIHL
+				return {
+					name: 'NIHL',
+					desc: 'Noise-induced hearing loss (NIHL).',
+					link : '//en.wikipedia.org/wiki/Noise-induced_hearing_loss',
+				}
+			} else if (certain == 1) {
+				if (meets_threshold && q.G1 < 50){
+					return {
+						name: 'NIHL',
+						desc: 'Noise-induced hearing loss (NIHL), possible caused by your instrument.',
+						link : '//en.wikipedia.org/wiki/Noise-induced_hearing_loss',
+					}
+				}
+				if(meets_threshold && q.G1 >= 50){
+					return {
+						name: 'NIHL',
+						desc: 'Possibly Noise-induced hearing loss (NIHL), but also could be age.',
+						link : '//en.wikipedia.org/wiki/Noise-induced_hearing_loss',
+					}
+				}
+				return {
+					name: 'NIHL',
+					desc: 'Unlikely, but possibly Noise-induced hearing loss (NIHL)',
+					link : '//en.wikipedia.org/wiki/Noise-induced_hearing_loss',
+				}
+			}
 
-	// 		}
-	// 		return false;
-	// 	},
-	// }
+			return false;
+		}
+	},
+	{
+		name: 'Tinnitus',
+		desc: 'Ringing or buzzing sound in ears.',
+		link: '//en.wikipedia.org/wiki/Tinnitus',
+		check: function (q){
+			// If H5 = Yes and “Life-Altering”
+			// If H5 = Yes and “Obtrusive” redirect to an “unlikely but possible” page
+			if (q.H5 && q.H5_a === 'Life-altering'){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	},
+	{
+		name: 'Tinnitus',
+		desc: 'Unlikely, but possibly Tinnitus, which is characterized as ringing or buzzing sound in ears.',
+		link: '//en.wikipedia.org/wiki/Tinnitus',
+		check: function (q){
+			// If H5 = Yes and “Life-Altering”
+			// If H5 = Yes and “Obtrusive” redirect to an “unlikely but possible” page
+			if (q.H5 && q.H5_a === 'Obtrusive'){
+				return true;
+			}else{
+				return false;
+			}
+
+		}
+	},
+	// Hyperacusis (hurt 132)
+	// If H1 = Yes
+	{
+		name: 'Hyperacusis',
+		desc: 'Oversensitivity to certain frequencies or volumes.',
+		link: '//en.wikipedia.org/wiki/Hyperacusis',
+		check: function (q){
+			return (q.H1 === true);
+		}
+	},
+	// Recruitment
+	// If H2 = Yes and “Always”
+	// If H2 = Yes and (not “always”) = redirect to an “unlikely but possible” page
+	{
+		name: 'Recruitment',
+		desc: 'Oversensitivity to only slight increases of sound intensity',
+		link: '//www.nchearingloss.org/recruit.htm',
+		check: function (q){
+			return (q.H2 && q.H2_a === 'Always');
+		}
+	}
+
+
 ]
 
 
