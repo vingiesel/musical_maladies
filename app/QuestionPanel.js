@@ -4,6 +4,8 @@ import Bootstrap from 'react-bootstrap';
 var {Grid, Col, Row, Input, Button, ButtonGroup, Alert} = Bootstrap;
 import Questions from 'app/questions';
 
+import _ from 'lodash';
+
 class NumberInput extends React.Component{
 	constructor (props){
 		super(props);
@@ -77,13 +79,61 @@ class ListInput extends React.Component{
 	}
 }
 
+
+class MultInput extends React.Component{
+	constructor (props){
+		super(props);
+		var selected = (props.default_answer || '').split(', ');
+		var selection = {}
+
+		if (selected !== ['']){
+			_.forEach(this.props.q.choices, function (choice){
+				selection[choice] = _.includes(selected, choice);
+			});
+		}
+		this.state = {current:selection};
+	}
+	onSelect = (e) => {
+		this.state.current[e] = (this.state.current[e] !== true)
+		this.setState({current: this.state.current});
+	}
+	onSubmit = () => {
+		var result = []
+		_.forEach(this.state.current, function (value, choice){
+			if (value === true){
+				result.push(choice);
+			}
+		})
+		var answer = result.length>0?result.join(', '):false;
+		this.props.submit(answer); 
+
+	}
+	render () {
+		var options = this.props.q.choices.map(function (item){
+			return <Input key={item} onChange={this.onSelect.bind(this, item)} type='checkbox' label={item} checked={this.state.current[item] === true} />
+		}.bind(this));
+		return (
+			<Row>
+				<Col className="seperate" xs={12}>
+					<b>Select all that apply, or none</b>
+					{options}
+				</Col>
+				<Col xs={12} className="seperate">
+					<Button onClick={this.onSubmit} disabled={!this.state.current}>Submit</Button>
+				</Col>
+			</Row>
+		)
+	}
+}
+
+
 class DropInput extends React.Component{
 	constructor (props){
 		super(props);
 		this.state = {current:props.default_answer};
 	}
 	onSelect = (e) => {
-		if(e.target.value === "..."){
+		if(e.target.value === '...'){
 			this.setState({current:null});
 		}
 		else{
@@ -124,7 +174,6 @@ class BoolInput extends React.Component{
 		this.props.submit(false);
 	}
 	render () {
-		console.log(this.props)
 		return (
 			<Col xs={12}>
 				<ButtonGroup>
@@ -148,6 +197,7 @@ export default class QuestionPanel extends React.Component {
 			case Questions.types.LIST: input = <ListInput submit={this.onAnswer} q={this.props.q}  default_answer={this.props.saved} />;break;
 			case Questions.types.DROP: input = <DropInput submit={this.onAnswer} q={this.props.q}  default_answer={this.props.saved} />;break;
 			case Questions.types.BOOL: input = <BoolInput submit={this.onAnswer}  default_answer={this.props.saved} labels={this.props.q.labels}/>;break;
+			case Questions.types.MULTI: input = <MultInput submit={this.onAnswer} q={this.props.q}  default_answer={this.props.saved} />;break;
 		}
 		return (
 			<Row key={JSON.stringify(this.props.q)} className="card">

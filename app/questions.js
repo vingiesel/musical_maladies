@@ -5,6 +5,7 @@ var qtypes = {
 	BOOL : 'bool',
 	LIST : 'list',
 	DROP : 'drop',
+	MULTI : 'multiple',
 };
 var sections = {
 	PRIMARY : 'primary',
@@ -44,6 +45,13 @@ class ListQuestion extends NumberQuestion{
 		super(text, section, next, mandatory,image_url, condition);
 		this.choices = choices;
 		this.type = qtypes.LIST;
+	}
+}
+
+class MultiQuestion extends ListQuestion{
+	constructor(text, section, choices, next, mandatory=false, image_url=null, condition=null){
+		super(text, section, choices, next, mandatory, image_url, condition);
+		this.type = qtypes.MULTI;
 	}
 }
 
@@ -111,7 +119,7 @@ function doesnt_play(list){
 var Questions = {
 	G1 : new NumberQuestion('How old are you?', sections.PRIMARY, 'G2'),
 	G2 : new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'G3'),
-	G3 : new ListQuestion('What is your gender?', sections.PRIMARY, ['Male', 'Female'], 'G4'),
+	G3 : new MultiQuestion('What is your sex?', sections.PRIMARY, ['Male', 'Female'], 'G4'),
 	G4 : new BoolQuestion('Do you primarily play under conductor?', sections.PRIMARY, function (answer){
 			if (answer === true){
 				return 'G4_a';
@@ -189,8 +197,8 @@ var Questions = {
 	H11: new BoolQuestion('Do you experience ear, neck, or jaw pain or frequent ear popping?', sections.HEARING, 'H12'),
 	H12: new BoolQuestion('Is it difficult for you to distinguish conversation or sound over ambient noise (background music, chatter)?', sections.HEARING, 'M1'),
 
-	M1: new BoolQuestion('When standing at rest, do your arms rest at your side or forward (on your thighs)? (Pictures)', sections.MUSCULAR, 'M2'), 
-	M2: new BoolQuestion('When standing at rest, do your hands face backward or toward each other? (Pictures)', sections.MUSCULAR, 'M3'),	 
+	M1: new BoolQuestion('When standing at rest, do your arms rest at your side or forward (on your thighs)? (Pictures)', sections.MUSCULAR, 'M2', false, null, null, ['Forward', 'Side']), 
+	M2: new BoolQuestion('When standing at rest, do your hands face backward or toward each other? (Pictures)', sections.MUSCULAR, 'M3', false, null, null, ['Backward', 'Toward']),	 
 	M3: new DropQuestion('Do you experience pain and/or a burning sensation in your:', sections.MUSCULAR, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure', 'joints', 'none of the above'], function (answer){
 		return (answer !== 'none of the above')?'M3_a':'M4'}),
 	M3_a: new ListQuestion('In which tier would you place your pain?', sections.MUSCULAR, FryScale, 'M4'),
@@ -204,24 +212,24 @@ var Questions = {
 	M7: new ListQuestion('Is your playing style intense or emotional?', sections.MUSCULAR, Freq, 'M8'),	 
 	M8: new ListQuestion('Is your performance position awkward or uncomfortable?', sections.MUSCULAR, Freq, 'M9'),	 
 	M9: new BoolQuestion('Do you particularly enjoy difficult, technically demanding, and/or loud repertoire?', sections.MUSCULAR, 'M10'),	 
-	M10: new ListQuestion('(If Instrument = String or Keyboard) Do you slam your bow on the strings, slap your fingers on the strings, or slam/squeeze the keys of your instrument?', sections.MUSCULAR, Freq, 'M11', false, null, does_play([Strings, Keyboard])),
+	M10: new ListQuestion('Do you slam your bow on the strings, slap your fingers on the strings, or slam/squeeze the keys of your instrument?', sections.MUSCULAR, Freq, 'M11', false, null, does_play([Strings, Keyboard])),
 	M11: new ListQuestion('At what dynamic do you practice?', sections.MUSCULAR, ['Forte', 'Mezzo-Forte', 'Piano', 'Dynamics of Piece'], 'M12'),	 
-	M12: new ListQuestion('(If Instrument = not keyboard or percussion) To what extent do you squeeze your instrument while holding it?', sections.MUSCULAR, ['Enough to support it', 'More than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M13', false, null, doesnt_play([Keyboard, Percussion])),	 
-	M13: new ListQuestion('(If Instrument = string or keyboard) Do you slam/squeeze the keys/strings even when playing softly?', sections.MUSCULAR, Freq, 'M14', false, null, does_play([Strings, Keyboard])),	 
+	M12: new ListQuestion('To what extent do you squeeze your instrument while holding it?', sections.MUSCULAR, ['Enough to support it', 'More than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M13', false, null, doesnt_play([Keyboard, Percussion])),	 
+	M13: new ListQuestion('Do you slam/squeeze the keys/strings even when playing softly?', sections.MUSCULAR, Freq, 'M14', false, null, does_play([Strings, Keyboard])),	 
 	M14: new ListQuestion('Do you clench or grit your teeth while practicing/performing?', sections.MUSCULAR, Freq, 'M15'),	 
 	M15: new ListQuestion('Do you maintain a back-to-back schedule of rehearsals, gigs, and performances?', sections.MUSCULAR, Freq, 'M16'),
-	M16: new ListQuestion('(If Instrument = not percussion) Do you fling your fingers off of the strings or keys?', sections.MUSCULAR, Freq, 'M17', false, null, doesnt_play([Percussion, ])),	 
-	M17: new ListQuestion('(If Instrument = string or guitar) How tightly do you grip your bow or fingerboard?', sections.MUSCULAR, ['Enough to support it', 'more than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M18', false, null, does_play([Strings, 'Guitar'])),	 
+	M16: new ListQuestion('Do you fling your fingers off of the strings or keys?', sections.MUSCULAR, Freq, 'M17', false, null, doesnt_play([Percussion, ])),	 
+	M17: new ListQuestion('How tightly do you grip your bow or fingerboard?', sections.MUSCULAR, ['Enough to support it', 'more than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M18', false, null, does_play([Strings, 'Guitar'])),	 
 	M18: new ListQuestion('How often do you play without warming up?', sections.MUSCULAR, Freq, 'M19'),	 
-	M19: new ListQuestion('(If instrument = string) Do you play with a heavy bow?', sections.MUSCULAR, Freq, 'M20', false, null, does_play([Strings])),	 
-	M20: new ListQuestion('(If instrument = string or guitar) Do you play with high strings?', sections.MUSCULAR, Freq, 'M21', false, null, does_play([Strings, 'Guitar'])),	 
-	M21: new ListQuestion('(If Instrument = Violin or Viola) Do you play with an ill-fitting or worn out chinrest?', sections.MUSCULAR, Freq, 'M22', false, null, does_play(['Violin', 'Viola'])),	 
+	M19: new ListQuestion('Do you play with a heavy bow?', sections.MUSCULAR, Freq, 'M20', false, null, does_play([Strings])),	 
+	M20: new ListQuestion('Do you play with high strings?', sections.MUSCULAR, Freq, 'M21', false, null, does_play([Strings, 'Guitar'])),	 
+	M21: new ListQuestion('Do you play with an ill-fitting or worn out chinrest?', sections.MUSCULAR, Freq, 'M22', false, null, does_play(['Violin', 'Viola'])),	 
 	M22: new ListQuestion('Do you stretch to reach notes or keys?', sections.MUSCULAR, Freq, 'M23'),	 
 	M23: new BoolQuestion('Do you hold fingers uplifted or curled (Picture)?', sections.MUSCULAR, function (answer){
 		return (answer === true)?'M23_a':'M24'}),
 	M23_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M24'),	 
 	M24: new BoolQuestion('Do you hold stretches, double stops, or chords?', sections.MUSCULAR, 'M25'),	 
-	M25: new BoolQuestion('(If Instrument = string) Do you involve more than your lower arm when changing from downbow to upbow?', sections.MUSCULAR, function (answer){
+	M25: new BoolQuestion('Do you involve more than your lower arm when changing from downbow to upbow?', sections.MUSCULAR, function (answer){
 		return (answer === true)?'M25_a':'M26'}, false, null, does_play([Strings,])),
 	M25_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M26'),
 	M26: new BoolQuestion('When you sit, do you feel stable?', sections.MUSCULAR, 'M27'),	 
@@ -251,14 +259,14 @@ var Questions = {
 	M37: new BoolQuestion('Are you double jointed/have very flexible joints?', sections.MUSCULAR, 'N1'),
 
 	
-	N1: new DropQuestion('Do you ever experience involuntary movement of your:', sections.NEURAL, ['fingers', 'hand', 'wrist', 'arm', 'mouth', 'embouchure', 'none of the above'], function (answer){
-		return (answer !== 'none of the above')?'N1_a':'N2'}),
+	N1: new MultiQuestion('Do you ever experience involuntary movement of your:', sections.NEURAL, ['fingers', 'hand', 'wrist', 'arm', 'mouth', 'embouchure'], function (answer){
+		return (answer !== false)?'N1_a':'N2'}),
 		
 		N1_a: new ListQuestion('How Often?', sections.NEURAL, ['When I play', 'Practice, for up to 30 minutes after I play', 'practice, constantly'], 'N2'),
 	
 	N2: new BoolQuestion('Have you noticed yourself becoming clumsier?', sections.NEURAL, 'N3'),
-	N3: new DropQuestion('Do you experience tingling or numbness in your:', sections.NEURAL, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure', 'none of the above'], function (answer){
-		return (answer !== 'none of the above')?'N3_a':'N4'}),
+	N3: new MultiQuestion('Do you experience tingling or numbness in your:', sections.NEURAL, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure'], function (answer){
+		return (answer !== false)?'N3_a':'N4'}),
 		
 		N3_a: new ListQuestion('How Often?', sections.NEURAL, ['When I play', 'Practice, for up to 30 minutes after I play', 'practice, constantly'], 'N4'), 
 	
@@ -267,14 +275,14 @@ var Questions = {
 		
 		N4_a: new ListQuestion('To what degree?', sections.NEURAL, ['Little', 'Some', 'a moderate degree', 'a significant degree'], 'N5'),
 	
-	N5: new BoolQuestion('(If Instrument = not brass) Have you experienced a phenomenon where passages previously non-problematic are becoming inexplicably more difficult?', sections.NEURAL, function (answer){
+	N5: new BoolQuestion('Have you experienced a phenomenon where passages previously non-problematic are becoming inexplicably more difficult?', sections.NEURAL, function (answer){
 		return (answer === true)?'N5_a':'N6'}, false, null, doesnt_play([Brass])),
 		
 		N5_a: new BoolQuestion('Has this phenomenon become more frequent as time has gone on?', sections.NEURAL, 'N5_b'),
 		N5_b: new BoolQuestion('Has increasing practice time helped?', sections.NEURAL, 'N5_c'),
 		N5_c: new BoolQuestion('Has taking time off helped?', sections.NEURAL, 'N5_d'),
 		N5_d: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N5_e'),
-		N5_e: new BoolQuestion('(If Instrument = brass) Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer){
+		N5_e: new BoolQuestion('Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer){
 			return (answer === true)?'N5_f':'N5_i'}, false, null, does_play([Brass])),
 		N5_f: new BoolQuestion('Has this phenomenon become more frequent as time has gone on?', sections.NEURAL, 'N5_g'),
 		N5_g: new BoolQuestion('Has increasing practice time helped?', sections.NEURAL, 'N5_h'),
@@ -282,7 +290,7 @@ var Questions = {
 
 		N5_i: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N6'),
 	
-	N6: new BoolQuestion('(If Instrument = keyboard) Do your fingers curl under when attempting to play?', sections.NEURAL, 'N7', false, null, does_play([Keyboard])),
+	N6: new BoolQuestion('Do your fingers curl under when attempting to play?', sections.NEURAL, 'N7', false, null, does_play([Keyboard])),
 	N7: new BoolQuestion('Do you experience muscular spasms while playing?', sections.NEURAL, function (answer){
 		return (answer === true)?'N7_a':'N8'}),
 		
@@ -293,8 +301,8 @@ var Questions = {
 	
 	N8: new BoolQuestion('Do you experience pain in your thumb but not in other fingers?', sections.NEURAL, 'N9'),
 	N9: new BoolQuestion('Do you experience a type of pain in your thumb that is unique?', sections.NEURAL, 'N10'),
-	N10: new BoolQuestion('(If Instrument = Violin or Viola) Have you noticed or been told that your neck longer than average?', sections.NEURAL, 'N11', false, null, does_play(['Violin', 'Viola'])),
-	N11: new BoolQuestion('(If Instrument = Keyboard or Percussion) Have you experienced severe pain in the ball of your foot (especially between the 3rd and 4th toes)?', sections.NEURAL, 'N12', false, null, does_play([Keyboard, Percussion])),
+	N10: new BoolQuestion('Have you noticed or been told that your neck longer than average?', sections.NEURAL, 'N11', false, null, does_play(['Violin', 'Viola'])),
+	N11: new BoolQuestion('Have you experienced severe pain in the ball of your foot (especially between the 3rd and 4th toes)?', sections.NEURAL, 'N12', false, null, does_play([Keyboard, Percussion])),
 	N12: new BoolQuestion('Do you experience pain or numbness in large areas of your arm(s)?', sections.NEURAL, 'N13'),
 	N13: new BoolQuestion('Have you noticed circulatory or color changes in your extremities?', sections.NEURAL, function (answer){
 		return (answer === true)?'N13_a':'N14'}),
