@@ -214,6 +214,9 @@ class Base extends React.Component{
 					</Col>
 					<Col className="hidden-xs hidden-" sm={1} hidden-xs fluid/>
 				</Row>
+				<Col className="bottomer">
+					Adapted From: Fry, Hunter J. H. “Overuse Syndrome of the Upper Limb in Musicians.” The Medical Journal of Australia 144, no. 4 (1986): 182-185; Fry, Hunter J. H, “Overuse Syndrome in Musicians: Prevention and Management.” The Lancet 328, Issue 8509 (1986): 728-731; and Fry, H. J. H. “The Treatment of Overuse Syndrome in Musicians.” Journal of The Royal Society of Medicine 81 no. 10 (1988): 572-575.
+				</Col>
 			</Grid>
 		);
 	}
