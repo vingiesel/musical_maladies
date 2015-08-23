@@ -27594,7 +27594,7 @@ System.register("npm:react@0.13.3", ["npm:react@0.13.3/react"], true, function(r
 });
 
 System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-check', 'npm:babel-runtime@5.4.7/helpers/inherits', 'npm:babel-runtime@5.4.7/helpers/get', 'npm:lodash@3.9.3'], function (_export) {
-	var _classCallCheck, _inherits, _get, _, qtypes, sections, NumberQuestion, ListQuestion, DropQuestion, BoolQuestion, FryScale, Freq, instrument_list, Percussion, Strings, Keyboard, Brass, Woodwind, Questions;
+	var _classCallCheck, _inherits, _get, _, qtypes, sections, NumberQuestion, ListQuestion, MultiQuestion, DropQuestion, BoolQuestion, FryScale, Freq, instrument_list, Percussion, Strings, Keyboard, Brass, Woodwind, Questions;
 
 	function does_play(list) {
 		return function (answers) {
@@ -27646,7 +27646,8 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				NUMBER: 'number',
 				BOOL: 'bool',
 				LIST: 'list',
-				DROP: 'drop' };
+				DROP: 'drop',
+				MULTI: 'multiple' };
 			sections = {
 				PRIMARY: 'primary',
 				WEIRD: 'weird',
@@ -27706,7 +27707,24 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				return ListQuestion;
 			})(NumberQuestion);
 
-			DropQuestion = (function (_ListQuestion) {
+			MultiQuestion = (function (_ListQuestion) {
+				function MultiQuestion(text, section, choices, next) {
+					var mandatory = arguments[4] === undefined ? false : arguments[4];
+					var image_url = arguments[5] === undefined ? null : arguments[5];
+					var condition = arguments[6] === undefined ? null : arguments[6];
+
+					_classCallCheck(this, MultiQuestion);
+
+					_get(Object.getPrototypeOf(MultiQuestion.prototype), 'constructor', this).call(this, text, section, choices, next, mandatory, image_url, condition);
+					this.type = qtypes.MULTI;
+				}
+
+				_inherits(MultiQuestion, _ListQuestion);
+
+				return MultiQuestion;
+			})(ListQuestion);
+
+			DropQuestion = (function (_ListQuestion2) {
 				function DropQuestion(text, section, choices, next) {
 					var mandatory = arguments[4] === undefined ? false : arguments[4];
 					var image_url = arguments[5] === undefined ? null : arguments[5];
@@ -27718,7 +27736,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 					this.type = qtypes.DROP;
 				}
 
-				_inherits(DropQuestion, _ListQuestion);
+				_inherits(DropQuestion, _ListQuestion2);
 
 				return DropQuestion;
 			})(ListQuestion);
@@ -27728,11 +27746,13 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 					var mandatory = arguments[3] === undefined ? false : arguments[3];
 					var image_url = arguments[4] === undefined ? null : arguments[4];
 					var condition = arguments[5] === undefined ? null : arguments[5];
+					var labels = arguments[6] === undefined ? ['Yes', 'No'] : arguments[6];
 
 					_classCallCheck(this, BoolQuestion);
 
 					_get(Object.getPrototypeOf(BoolQuestion.prototype), 'constructor', this).call(this, text, section, next, mandatory, image_url, condition);
 					this.type = qtypes.BOOL;
+					this.labels = labels;
 				}
 
 				_inherits(BoolQuestion, _NumberQuestion2);
@@ -27751,7 +27771,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 			Questions = {
 				G1: new NumberQuestion('How old are you?', sections.PRIMARY, 'G2'),
 				G2: new DropQuestion('What is your instrument?', sections.PRIMARY, instrument_list, 'G3'),
-				G3: new ListQuestion('What is your gender?', sections.PRIMARY, ['Male', 'Female'], 'G4'),
+				G3: new MultiQuestion('What is your sex?', sections.PRIMARY, ['Male', 'Female'], 'G4'),
 				G4: new BoolQuestion('Do you primarily play under conductor?', sections.PRIMARY, function (answer) {
 					if (answer === true) {
 						return 'G4_a';
@@ -27787,14 +27807,14 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 						return 'Q4';
 					}
 				}),
-				Q3_a: new BoolQuestion('Was it a decrease or an increase in physical activity?', sections.QUAL, 'Q4'),
+				Q3_a: new BoolQuestion('Was it a decrease or an increase in physical activity?', sections.QUAL, 'Q4', false, null, null, ['Decrease', 'Increase']),
 				Q4: new BoolQuestion('Have you noticed anything visibly different in the troublesome area since the pain has begun?', sections.QUAL, function (answer, answers, skip) {
 					if (answer || skip) {
 						return 'Q4_a';
 					} else {
 						return 'Q5';
 					}
-				}),
+				}, false, null, null, ['Slight', 'Extreme']),
 				Q4_a: new BoolQuestion('Do you notice a slight difference or an extreme difference?', sections.QUAL, 'Q5'),
 				Q5: new BoolQuestion('Is your pain related only to a specific passage?', sections.QUAL, function (answer, answers, skip) {
 					if (answer || skip) {
@@ -27828,8 +27848,8 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				H11: new BoolQuestion('Do you experience ear, neck, or jaw pain or frequent ear popping?', sections.HEARING, 'H12'),
 				H12: new BoolQuestion('Is it difficult for you to distinguish conversation or sound over ambient noise (background music, chatter)?', sections.HEARING, 'M1'),
 
-				M1: new BoolQuestion('When standing at rest, do your arms rest at your side or forward (on your thighs)? (Pictures)', sections.MUSCULAR, 'M2'),
-				M2: new BoolQuestion('When standing at rest, do your hands face backward or toward each other? (Pictures)', sections.MUSCULAR, 'M3'),
+				M1: new BoolQuestion('When standing at rest, do your arms rest at your side or forward (on your thighs)? (Pictures)', sections.MUSCULAR, 'M2', false, null, null, ['Forward', 'Side']),
+				M2: new BoolQuestion('When standing at rest, do your hands face backward or toward each other? (Pictures)', sections.MUSCULAR, 'M3', false, null, null, ['Backward', 'Toward']),
 				M3: new DropQuestion('Do you experience pain and/or a burning sensation in your:', sections.MUSCULAR, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure', 'joints', 'none of the above'], function (answer) {
 					return answer !== 'none of the above' ? 'M3_a' : 'M4';
 				}),
@@ -27846,25 +27866,25 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				M7: new ListQuestion('Is your playing style intense or emotional?', sections.MUSCULAR, Freq, 'M8'),
 				M8: new ListQuestion('Is your performance position awkward or uncomfortable?', sections.MUSCULAR, Freq, 'M9'),
 				M9: new BoolQuestion('Do you particularly enjoy difficult, technically demanding, and/or loud repertoire?', sections.MUSCULAR, 'M10'),
-				M10: new ListQuestion('(If Instrument = String or Keyboard) Do you slam your bow on the strings, slap your fingers on the strings, or slam/squeeze the keys of your instrument?', sections.MUSCULAR, Freq, 'M11', false, null, does_play([Strings, Keyboard])),
+				M10: new ListQuestion('Do you slam your bow on the strings, slap your fingers on the strings, or slam/squeeze the keys of your instrument?', sections.MUSCULAR, Freq, 'M11', false, null, does_play([Strings, Keyboard])),
 				M11: new ListQuestion('At what dynamic do you practice?', sections.MUSCULAR, ['Forte', 'Mezzo-Forte', 'Piano', 'Dynamics of Piece'], 'M12'),
-				M12: new ListQuestion('(If Instrument = not keyboard or percussion) To what extent do you squeeze your instrument while holding it?', sections.MUSCULAR, ['Enough to support it', 'More than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M13', false, null, doesnt_play([Keyboard, Percussion])),
-				M13: new ListQuestion('(If Instrument = string or keyboard) Do you slam/squeeze the keys/strings even when playing softly?', sections.MUSCULAR, Freq, 'M14', false, null, does_play([Strings, Keyboard])),
+				M12: new ListQuestion('To what extent do you squeeze your instrument while holding it?', sections.MUSCULAR, ['Enough to support it', 'More than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M13', false, null, doesnt_play([Keyboard, Percussion])),
+				M13: new ListQuestion('Do you slam/squeeze the keys/strings even when playing softly?', sections.MUSCULAR, Freq, 'M14', false, null, does_play([Strings, Keyboard])),
 				M14: new ListQuestion('Do you clench or grit your teeth while practicing/performing?', sections.MUSCULAR, Freq, 'M15'),
 				M15: new ListQuestion('Do you maintain a back-to-back schedule of rehearsals, gigs, and performances?', sections.MUSCULAR, Freq, 'M16'),
-				M16: new ListQuestion('(If Instrument = not percussion) Do you fling your fingers off of the strings or keys?', sections.MUSCULAR, Freq, 'M17', false, null, doesnt_play([Percussion])),
-				M17: new ListQuestion('(If Instrument = string or guitar) How tightly do you grip your bow or fingerboard?', sections.MUSCULAR, ['Enough to support it', 'more than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M18', false, null, does_play([Strings, 'Guitar'])),
+				M16: new ListQuestion('Do you fling your fingers off of the strings or keys?', sections.MUSCULAR, Freq, 'M17', false, null, doesnt_play([Percussion])),
+				M17: new ListQuestion('How tightly do you grip your bow or fingerboard?', sections.MUSCULAR, ['Enough to support it', 'more than is needed to support it but not enough to feel strained', 'enough to feel strained', 'enough to cause white knuckles', 'indentations on skin'], 'M18', false, null, does_play([Strings, 'Guitar'])),
 				M18: new ListQuestion('How often do you play without warming up?', sections.MUSCULAR, Freq, 'M19'),
-				M19: new ListQuestion('(If instrument = string) Do you play with a heavy bow?', sections.MUSCULAR, Freq, 'M20', false, null, does_play([Strings])),
-				M20: new ListQuestion('(If instrument = string or guitar) Do you play with high strings?', sections.MUSCULAR, Freq, 'M21', false, null, does_play([Strings, 'Guitar'])),
-				M21: new ListQuestion('(If Instrument = Violin or Viola) Do you play with an ill-fitting or worn out chinrest?', sections.MUSCULAR, Freq, 'M22', false, null, does_play(['Violin', 'Viola'])),
+				M19: new ListQuestion('Do you play with a heavy bow?', sections.MUSCULAR, Freq, 'M20', false, null, does_play([Strings])),
+				M20: new ListQuestion('Do you play with high strings?', sections.MUSCULAR, Freq, 'M21', false, null, does_play([Strings, 'Guitar'])),
+				M21: new ListQuestion('Do you play with an ill-fitting or worn out chinrest?', sections.MUSCULAR, Freq, 'M22', false, null, does_play(['Violin', 'Viola'])),
 				M22: new ListQuestion('Do you stretch to reach notes or keys?', sections.MUSCULAR, Freq, 'M23'),
 				M23: new BoolQuestion('Do you hold fingers uplifted or curled (Picture)?', sections.MUSCULAR, function (answer) {
 					return answer === true ? 'M23_a' : 'M24';
 				}),
 				M23_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M24'),
 				M24: new BoolQuestion('Do you hold stretches, double stops, or chords?', sections.MUSCULAR, 'M25'),
-				M25: new BoolQuestion('(If Instrument = string) Do you involve more than your lower arm when changing from downbow to upbow?', sections.MUSCULAR, function (answer) {
+				M25: new BoolQuestion('Do you involve more than your lower arm when changing from downbow to upbow?', sections.MUSCULAR, function (answer) {
 					return answer === true ? 'M25_a' : 'M26';
 				}, false, null, does_play([Strings])),
 				M25_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M26'),
@@ -27891,9 +27911,9 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				}),
 				M32_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M33'),
 				M33: new BoolQuestion('Do you sit or stand immobile for long periods of time?', sections.MUSCULAR, function (answer) {
-					return answer === true ? 'M33_a' : 'M35';
+					return answer === true ? 'M34' : 'M35';
 				}),
-				M33_a: new NumberQuestion('How often?', sections.MUSCULAR, 'M35'),
+				M34: new DropQuestion('How often?', sections.MUSCULAR, ['30 minutes', '1 hour', '1 hour 30 minutes', '2 hours', '2 hours 30 minutes', '3 hours'], 'M35'),
 				M35: new BoolQuestion('Do you experience several points of pain?', sections.MUSCULAR, function (answer) {
 					return answer === true ? 'M35_a' : 'M36';
 				}),
@@ -27901,15 +27921,15 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				M36: new BoolQuestion('Would you characterize your pain as a deep muscular ache, stiffness, or soreness?', sections.MUSCULAR, 'M37'),
 				M37: new BoolQuestion('Are you double jointed/have very flexible joints?', sections.MUSCULAR, 'N1'),
 
-				N1: new DropQuestion('Do you ever experience involuntary movement of your:', sections.NEURAL, ['fingers', 'hand', 'wrist', 'arm', 'mouth', 'embouchure', 'none of the above'], function (answer) {
-					return answer !== 'none of the above' ? 'N1_a' : 'N2';
+				N1: new MultiQuestion('Do you ever experience involuntary movement of your:', sections.NEURAL, ['fingers', 'hand', 'wrist', 'arm', 'mouth', 'embouchure'], function (answer) {
+					return answer !== false ? 'N1_a' : 'N2';
 				}),
 
 				N1_a: new ListQuestion('How Often?', sections.NEURAL, ['When I play', 'Practice, for up to 30 minutes after I play', 'practice, constantly'], 'N2'),
 
 				N2: new BoolQuestion('Have you noticed yourself becoming clumsier?', sections.NEURAL, 'N3'),
-				N3: new DropQuestion('Do you experience tingling or numbness in your:', sections.NEURAL, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure', 'none of the above'], function (answer) {
-					return answer !== 'none of the above' ? 'N3_a' : 'N4';
+				N3: new MultiQuestion('Do you experience tingling or numbness in your:', sections.NEURAL, ['hand', 'wrist', 'forearm', 'elbow', 'upperarm', 'shoulder', 'neck', 'upperback', 'midback', 'lowerback', 'thighs', 'knees', 'lower legs', 'ankles', 'feet', 'jaw', 'embouchure'], function (answer) {
+					return answer !== false ? 'N3_a' : 'N4';
 				}),
 
 				N3_a: new ListQuestion('How Often?', sections.NEURAL, ['When I play', 'Practice, for up to 30 minutes after I play', 'practice, constantly'], 'N4'),
@@ -27920,7 +27940,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 
 				N4_a: new ListQuestion('To what degree?', sections.NEURAL, ['Little', 'Some', 'a moderate degree', 'a significant degree'], 'N5'),
 
-				N5: new BoolQuestion('(If Instrument = not brass) Have you experienced a phenomenon where passages previously non-problematic are becoming inexplicably more difficult?', sections.NEURAL, function (answer) {
+				N5: new BoolQuestion('Have you experienced a phenomenon where passages previously non-problematic are becoming inexplicably more difficult?', sections.NEURAL, function (answer) {
 					return answer === true ? 'N5_a' : 'N6';
 				}, false, null, doesnt_play([Brass])),
 
@@ -27928,7 +27948,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				N5_b: new BoolQuestion('Has increasing practice time helped?', sections.NEURAL, 'N5_c'),
 				N5_c: new BoolQuestion('Has taking time off helped?', sections.NEURAL, 'N5_d'),
 				N5_d: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N5_e'),
-				N5_e: new BoolQuestion('(If Instrument = brass) Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer) {
+				N5_e: new BoolQuestion('Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer) {
 					return answer === true ? 'N5_f' : 'N5_i';
 				}, false, null, does_play([Brass])),
 				N5_f: new BoolQuestion('Has this phenomenon become more frequent as time has gone on?', sections.NEURAL, 'N5_g'),
@@ -27937,7 +27957,7 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 
 				N5_i: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N6'),
 
-				N6: new BoolQuestion('(If Instrument = keyboard) Do your fingers curl under when attempting to play?', sections.NEURAL, 'N7', false, null, does_play([Keyboard])),
+				N6: new BoolQuestion('Do your fingers curl under when attempting to play?', sections.NEURAL, 'N7', false, null, does_play([Keyboard])),
 				N7: new BoolQuestion('Do you experience muscular spasms while playing?', sections.NEURAL, function (answer) {
 					return answer === true ? 'N7_a' : 'N8';
 				}),
@@ -27950,8 +27970,8 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 
 				N8: new BoolQuestion('Do you experience pain in your thumb but not in other fingers?', sections.NEURAL, 'N9'),
 				N9: new BoolQuestion('Do you experience a type of pain in your thumb that is unique?', sections.NEURAL, 'N10'),
-				N10: new BoolQuestion('(If Instrument = Violin or Viola) Have you noticed or been told that your neck longer than average?', sections.NEURAL, 'N11', false, null, does_play(['Violin', 'Viola'])),
-				N11: new BoolQuestion('(If Instrument = Keyboard or Percussion) Have you experienced severe pain in the ball of your foot (especially between the 3rd and 4th toes)?', sections.NEURAL, 'N12', false, null, does_play([Keyboard, Percussion])),
+				N10: new BoolQuestion('Have you noticed or been told that your neck longer than average?', sections.NEURAL, 'N11', false, null, does_play(['Violin', 'Viola'])),
+				N11: new BoolQuestion('Have you experienced severe pain in the ball of your foot (especially between the 3rd and 4th toes)?', sections.NEURAL, 'N12', false, null, does_play([Keyboard, Percussion])),
 				N12: new BoolQuestion('Do you experience pain or numbness in large areas of your arm(s)?', sections.NEURAL, 'N13'),
 				N13: new BoolQuestion('Have you noticed circulatory or color changes in your extremities?', sections.NEURAL, function (answer) {
 					return answer === true ? 'N13_a' : 'N14';
@@ -28264,8 +28284,8 @@ System.register('app/diagnosis', ['app/questions', 'npm:lodash@3.9.3'], function
 		}
 	};
 });
-System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:babel-runtime@5.4.7/helpers/get', 'npm:babel-runtime@5.4.7/helpers/create-class', 'npm:babel-runtime@5.4.7/helpers/class-call-check', 'npm:react@0.13.3', 'npm:react-bootstrap@0.24.0-alpha.0', 'app/questions'], function (_export) {
-	var _inherits, _get, _createClass, _classCallCheck, React, Bootstrap, Questions, Grid, Col, Row, Input, Button, ButtonGroup, Alert, NumberInput, ListInput, DropInput, BoolInput, QuestionPanel;
+System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:babel-runtime@5.4.7/helpers/get', 'npm:babel-runtime@5.4.7/helpers/create-class', 'npm:babel-runtime@5.4.7/helpers/class-call-check', 'npm:react@0.13.3', 'npm:react-bootstrap@0.24.0-alpha.0', 'app/questions', 'npm:lodash@3.9.3'], function (_export) {
+	var _inherits, _get, _createClass, _classCallCheck, React, Bootstrap, Questions, _, Grid, Col, Row, Input, Button, ButtonGroup, Alert, NumberInput, ListInput, MultInput, DropInput, BoolInput, QuestionPanel;
 
 	return {
 		setters: [function (_npmBabelRuntime547HelpersInherits) {
@@ -28282,6 +28302,8 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 			Bootstrap = _npmReactBootstrap0240Alpha0['default'];
 		}, function (_appQuestions) {
 			Questions = _appQuestions['default'];
+		}, function (_npmLodash393) {
+			_ = _npmLodash393['default'];
 		}],
 		execute: function () {
 			'use strict';
@@ -28416,9 +28438,81 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 				return ListInput;
 			})(React.Component);
 
-			DropInput = (function (_React$Component3) {
-				function DropInput(props) {
+			MultInput = (function (_React$Component3) {
+				function MultInput(props) {
 					var _this3 = this;
+
+					_classCallCheck(this, MultInput);
+
+					_get(Object.getPrototypeOf(MultInput.prototype), 'constructor', this).call(this, props);
+
+					this.onSelect = function (e) {
+						_this3.state.current[e] = _this3.state.current[e] !== true;
+						_this3.setState({ current: _this3.state.current });
+					};
+
+					this.onSubmit = function () {
+						var result = [];
+						_.forEach(_this3.state.current, function (value, choice) {
+							if (value === true) {
+								result.push(choice);
+							}
+						});
+						var answer = result.length > 0 ? result.join(', ') : false;
+						_this3.props.submit(answer);
+					};
+
+					var selected = (props.default_answer || '').split(', ');
+					var selection = {};
+
+					if (selected !== ['']) {
+						_.forEach(this.props.q.choices, function (choice) {
+							selection[choice] = _.includes(selected, choice);
+						});
+					}
+					this.state = { current: selection };
+				}
+
+				_inherits(MultInput, _React$Component3);
+
+				_createClass(MultInput, [{
+					key: 'render',
+					value: function render() {
+						var options = this.props.q.choices.map((function (item) {
+							return React.createElement(Input, { key: item, onChange: this.onSelect.bind(this, item), type: 'checkbox', label: item, checked: this.state.current[item] === true });
+						}).bind(this));
+						return React.createElement(
+							Row,
+							null,
+							React.createElement(
+								Col,
+								{ className: 'seperate', xs: 12 },
+								React.createElement(
+									'b',
+									null,
+									'Select all that apply, or none'
+								),
+								options
+							),
+							React.createElement(
+								Col,
+								{ xs: 12, className: 'seperate' },
+								React.createElement(
+									Button,
+									{ onClick: this.onSubmit, disabled: !this.state.current },
+									'Submit'
+								)
+							)
+						);
+					}
+				}]);
+
+				return MultInput;
+			})(React.Component);
+
+			DropInput = (function (_React$Component4) {
+				function DropInput(props) {
+					var _this4 = this;
 
 					_classCallCheck(this, DropInput);
 
@@ -28426,23 +28520,23 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 
 					this.onSelect = function (e) {
 						if (e.target.value === '...') {
-							_this3.setState({ current: null });
+							_this4.setState({ current: null });
 						} else {
-							_this3.setState({ current: e.target.value });
+							_this4.setState({ current: e.target.value });
 						}
 					};
 
 					this.onSubmit = function () {
-						if (!_this3.state.current) {
+						if (!_this4.state.current) {
 							return;
 						}
-						_this3.props.submit(_this3.state.current);
+						_this4.props.submit(_this4.state.current);
 					};
 
 					this.state = { current: props.default_answer };
 				}
 
-				_inherits(DropInput, _React$Component3);
+				_inherits(DropInput, _React$Component4);
 
 				_createClass(DropInput, [{
 					key: 'render',
@@ -28487,26 +28581,26 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 				return DropInput;
 			})(React.Component);
 
-			BoolInput = (function (_React$Component4) {
+			BoolInput = (function (_React$Component5) {
 				function BoolInput() {
-					var _this4 = this;
+					var _this5 = this;
 
 					_classCallCheck(this, BoolInput);
 
-					if (_React$Component4 != null) {
-						_React$Component4.apply(this, arguments);
+					if (_React$Component5 != null) {
+						_React$Component5.apply(this, arguments);
 					}
 
 					this.yup = function () {
-						_this4.props.submit(true);
+						_this5.props.submit(true);
 					};
 
 					this.nope = function () {
-						_this4.props.submit(false);
+						_this5.props.submit(false);
 					};
 				}
 
-				_inherits(BoolInput, _React$Component4);
+				_inherits(BoolInput, _React$Component5);
 
 				_createClass(BoolInput, [{
 					key: 'render',
@@ -28520,12 +28614,12 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 								React.createElement(
 									Button,
 									{ onClick: this.yup, primary: this.props.default_answer === true },
-									'Yes'
+									this.props.labels[0]
 								),
 								React.createElement(
 									Button,
 									{ onClick: this.nope, primary: this.props.default_answer === false },
-									'No'
+									this.props.labels[1]
 								)
 							)
 						);
@@ -28535,22 +28629,22 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 				return BoolInput;
 			})(React.Component);
 
-			QuestionPanel = (function (_React$Component5) {
+			QuestionPanel = (function (_React$Component6) {
 				function QuestionPanel() {
-					var _this5 = this;
+					var _this6 = this;
 
 					_classCallCheck(this, QuestionPanel);
 
-					if (_React$Component5 != null) {
-						_React$Component5.apply(this, arguments);
+					if (_React$Component6 != null) {
+						_React$Component6.apply(this, arguments);
 					}
 
 					this.onAnswer = function (answer) {
-						_this5.props.submit(answer, _this5.props.q);
+						_this6.props.submit(answer, _this6.props.q);
 					};
 				}
 
-				_inherits(QuestionPanel, _React$Component5);
+				_inherits(QuestionPanel, _React$Component6);
 
 				_createClass(QuestionPanel, [{
 					key: 'render',
@@ -28565,7 +28659,9 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 							case Questions.types.DROP:
 								input = React.createElement(DropInput, { submit: this.onAnswer, q: this.props.q, default_answer: this.props.saved });break;
 							case Questions.types.BOOL:
-								input = React.createElement(BoolInput, { submit: this.onAnswer, default_answer: this.props.saved });break;
+								input = React.createElement(BoolInput, { submit: this.onAnswer, default_answer: this.props.saved, labels: this.props.q.labels });break;
+							case Questions.types.MULTI:
+								input = React.createElement(MultInput, { submit: this.onAnswer, q: this.props.q, default_answer: this.props.saved });break;
 						}
 						return React.createElement(
 							Row,
@@ -28912,7 +29008,7 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 												React.createElement(
 													'strong',
 													null,
-													'Fry Scale:'
+													'Pain Scale:'
 												),
 												React.createElement(
 													'ul',
@@ -28930,7 +29026,7 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 													React.createElement(
 														'li',
 														null,
-														'Tier 3 - Pain continues during ADL or rest'
+														'Tier 3 - Pain continues during Activities of Daily Living or rest'
 													),
 													React.createElement(
 														'li',
@@ -28940,7 +29036,7 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 													React.createElement(
 														'li',
 														null,
-														'Tier 5 - ADLs add to pain and little ability to complete tasks, continuous pain, obvious physical changes'
+														'Tier 5 - Activities of Daily Living add to pain and little ability to complete tasks, continuous pain, obvious physical changes'
 													)
 												)
 											) : undefined,
@@ -28986,6 +29082,11 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 									)
 								),
 								React.createElement(Col, { className: 'hidden-xs hidden-', sm: 1, 'hidden-xs': true, fluid: true })
+							),
+							React.createElement(
+								Col,
+								{ className: 'bottomer' },
+								'Adapted From: Fry, Hunter J. H. “Overuse Syndrome of the Upper Limb in Musicians.” The Medical Journal of Australia 144, no. 4 (1986): 182-185; Fry, Hunter J. H, “Overuse Syndrome in Musicians: Prevention and Management.” The Lancet 328, Issue 8509 (1986): 728-731; and Fry, H. J. H. “The Treatment of Overuse Syndrome in Musicians.” Journal of The Royal Society of Medicine 81 no. 10 (1988): 572-575.'
 							)
 						);
 					}
