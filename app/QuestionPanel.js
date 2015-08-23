@@ -124,11 +124,12 @@ class BoolInput extends React.Component{
 		this.props.submit(false);
 	}
 	render () {
+		console.log(this.props)
 		return (
 			<Col xs={12}>
 				<ButtonGroup>
-					<Button onClick={this.yup} primary={this.props.default_answer === true}>Yes</Button>
-					<Button onClick={this.nope} primary={this.props.default_answer === false}>No</Button>
+					<Button onClick={this.yup} primary={this.props.default_answer === true}>{this.props.labels[0]}</Button>
+					<Button onClick={this.nope} primary={this.props.default_answer === false}>{this.props.labels[1]}</Button>
 				</ButtonGroup>
 			</Col>
 		)
@@ -146,7 +147,7 @@ export default class QuestionPanel extends React.Component {
 			case Questions.types.NUMBER: input = <NumberInput submit={this.onAnswer} default_answer={this.props.saved} />;break;
 			case Questions.types.LIST: input = <ListInput submit={this.onAnswer} q={this.props.q}  default_answer={this.props.saved} />;break;
 			case Questions.types.DROP: input = <DropInput submit={this.onAnswer} q={this.props.q}  default_answer={this.props.saved} />;break;
-			case Questions.types.BOOL: input = <BoolInput submit={this.onAnswer}  default_answer={this.props.saved} />;break;
+			case Questions.types.BOOL: input = <BoolInput submit={this.onAnswer}  default_answer={this.props.saved} labels={this.props.q.labels}/>;break;
 		}
 		return (
 			<Row key={JSON.stringify(this.props.q)} className="card">

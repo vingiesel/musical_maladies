@@ -182,13 +182,13 @@ class Base extends React.Component{
 								<Row className="card">All Done!</Row>}
 								{(this.state.current_question !== "DONE" && this.state.current_question.section === Question.sections.MUSCULAR)?
 								<Row className="card seperate">
-									<strong>Fry Scale:</strong>
+									<strong>Pain Scale:</strong>
 									<ul>
 										<li>Tier 1 - pain at one spot - while playing (regularly)</li>
 										<li>Tier 2 - pain at several spots while playing (regularly)</li>
-										<li>Tier 3 - Pain continues during ADL or rest</li>
+										<li>Tier 3 - Pain continues during Activities of Daily Living or rest</li>
 										<li>Tier 4 - All of the above but includes night, change in physical appearance and loss of motor function</li>
-										<li>Tier 5 - ADLs add to pain and little ability to complete tasks, continuous pain, obvious physical changes</li>
+										<li>Tier 5 - Activities of Daily Living add to pain and little ability to complete tasks, continuous pain, obvious physical changes</li>
 									</ul>
 								</Row>:undefined}
 								{(this.state.current_question.image_url)?

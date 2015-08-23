@@ -55,9 +55,10 @@ class DropQuestion extends ListQuestion{
 }
 
 class BoolQuestion extends NumberQuestion {
-	constructor(text, section, next, mandatory=false, image_url=null, condition=null){
+	constructor(text, section, next, mandatory=false, image_url=null, condition=null, labels=['Yes', 'No']){
 		super(text, section, next, mandatory,image_url, condition);
 		this.type = qtypes.BOOL;
+		this.labels = labels;
 	}
 }
 
@@ -146,14 +147,14 @@ var Questions = {
 				return 'Q4';
 			}
 		}),
-	Q3_a : new BoolQuestion('Was it a decrease or an increase in physical activity?', sections.QUAL, 'Q4'),
+	Q3_a : new BoolQuestion('Was it a decrease or an increase in physical activity?', sections.QUAL, 'Q4', false, null, null, ['Decrease', 'Increase']),
 	Q4 : new BoolQuestion('Have you noticed anything visibly different in the troublesome area since the pain has begun?', sections.QUAL, function (answer, answers, skip){
 			if (answer || skip){
 				return 'Q4_a';
 			}else{
 				return 'Q5';
 			}
-		}),
+		}, false, null, null, ['Slight', 'Extreme']),
 	Q4_a : new BoolQuestion('Do you notice a slight difference or an extreme difference?', sections.QUAL, 'Q5'),
 	Q5 : new BoolQuestion('Is your pain related only to a specific passage?', sections.QUAL, function (answer, answers, skip){
 			if (answer || skip){
@@ -241,8 +242,8 @@ var Questions = {
 		return (answer !== 'none of the above')?'M32_a':'M33'}),
 		M32_a: new ListQuestion('How often?', sections.MUSCULAR, Freq, 'M33'),
 	M33: new BoolQuestion('Do you sit or stand immobile for long periods of time?', sections.MUSCULAR, function (answer){
-		return (answer === true)?'M33_a':'M35'}),
-		M33_a: new NumberQuestion('How often?', sections.MUSCULAR, 'M35'),
+		return (answer === true)?'M34':'M35'}),
+	M34: new DropQuestion('How often?', sections.MUSCULAR, ['30 minutes', '1 hour', '1 hour 30 minutes', '2 hours', '2 hours 30 minutes', '3 hours'], 'M35'),
 	M35: new BoolQuestion('Do you experience several points of pain?', sections.MUSCULAR, function (answer){
 		return (answer === true)?'M35_a':'M36'}),
 		M35_a: new ListQuestion('How many?', sections.MUSCULAR, ['1-5', '5-9', '10-15', '15+', 'I hurt all over'], 'M36'),
