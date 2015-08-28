@@ -27941,15 +27941,15 @@ System.register('app/questions', ['npm:babel-runtime@5.4.7/helpers/class-call-ch
 				N4_a: new ListQuestion('To what degree?', sections.NEURAL, ['Little', 'Some', 'a moderate degree', 'a significant degree'], 'N5'),
 
 				N5: new BoolQuestion('Have you experienced a phenomenon where passages previously non-problematic are becoming inexplicably more difficult?', sections.NEURAL, function (answer) {
-					return answer === true ? 'N5_a' : 'N6';
+					return answer === true ? 'N5_a' : 'N5b';
 				}, false, null, doesnt_play([Brass])),
 
 				N5_a: new BoolQuestion('Has this phenomenon become more frequent as time has gone on?', sections.NEURAL, 'N5_b'),
 				N5_b: new BoolQuestion('Has increasing practice time helped?', sections.NEURAL, 'N5_c'),
 				N5_c: new BoolQuestion('Has taking time off helped?', sections.NEURAL, 'N5_d'),
-				N5_d: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N5_e'),
-				N5_e: new BoolQuestion('Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer) {
-					return answer === true ? 'N5_f' : 'N5_i';
+				N5_d: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N6'),
+				N5b: new BoolQuestion('Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer) {
+					return answer === true ? 'N5_f' : 'N6';
 				}, false, null, does_play([Brass])),
 				N5_f: new BoolQuestion('Has this phenomenon become more frequent as time has gone on?', sections.NEURAL, 'N5_g'),
 				N5_g: new BoolQuestion('Has increasing practice time helped?', sections.NEURAL, 'N5_h'),
@@ -29038,6 +29038,11 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 														null,
 														'Tier 5 - Activities of Daily Living add to pain and little ability to complete tasks, continuous pain, obvious physical changes'
 													)
+												),
+												React.createElement(
+													'p',
+													{ className: 'credits' },
+													'Adapted From: Fry, Hunter J. H. “Overuse Syndrome of the Upper Limb in Musicians.” The Medical Journal of Australia 144, no. 4 (1986): 182-185; Fry, Hunter J. H, “Overuse Syndrome in Musicians: Prevention and Management.” The Lancet 328, Issue 8509 (1986): 728-731; and Fry, H. J. H. “The Treatment of Overuse Syndrome in Musicians.” Journal of The Royal Society of Medicine 81 no. 10 (1988): 572-575.'
 												)
 											) : undefined,
 											this.state.current_question.image_url ? React.createElement(
@@ -29082,11 +29087,6 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 									)
 								),
 								React.createElement(Col, { className: 'hidden-xs hidden-', sm: 1, 'hidden-xs': true, fluid: true })
-							),
-							React.createElement(
-								Col,
-								{ className: 'bottomer' },
-								'Adapted From: Fry, Hunter J. H. “Overuse Syndrome of the Upper Limb in Musicians.” The Medical Journal of Australia 144, no. 4 (1986): 182-185; Fry, Hunter J. H, “Overuse Syndrome in Musicians: Prevention and Management.” The Lancet 328, Issue 8509 (1986): 728-731; and Fry, H. J. H. “The Treatment of Overuse Syndrome in Musicians.” Journal of The Royal Society of Medicine 81 no. 10 (1988): 572-575.'
 							)
 						);
 					}
