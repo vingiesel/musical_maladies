@@ -1,59 +1,58 @@
 /* line 3, app/styles/main.scss */
 body {
-  background-color: #EEEEEE;
-  height: 100%; }
+  background-color: #EEEEEE; }
 
-/* line 7, app/styles/main.scss */
+/* line 6, app/styles/main.scss */
 .header {
   background-color: #FFFFFF;
   box-shadow: 0px 0px 5px 2px rgba(50, 50, 50, 0.25);
   padding: 10px; }
 
-/* line 15, app/styles/main.scss */
+/* line 14, app/styles/main.scss */
 .content {
   z-index: 8; }
 
-/* line 18, app/styles/main.scss */
+/* line 17, app/styles/main.scss */
 .commands {
   margin-top: 20px;
   margin-bottom: 20px; }
 
-/* line 22, app/styles/main.scss */
+/* line 21, app/styles/main.scss */
 .row_spacer {
   height: 20px; }
 
-/* line 26, app/styles/main.scss */
+/* line 25, app/styles/main.scss */
 .row_spacer_small {
   height: 10px; }
 
-/* line 30, app/styles/main.scss */
+/* line 29, app/styles/main.scss */
 .seperate {
   margin-top: 10px; }
 
-/* line 34, app/styles/main.scss */
+/* line 33, app/styles/main.scss */
 .white {
   color: white; }
 
-/* line 37, app/styles/main.scss */
+/* line 36, app/styles/main.scss */
 .card {
   background-color: #FFFFFF;
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.11);
   padding: 1em;
   z-index: 6; }
 
-/* line 45, app/styles/main.scss */
+/* line 44, app/styles/main.scss */
 .centered {
   text-align: center; }
 
-/* line 48, app/styles/main.scss */
+/* line 47, app/styles/main.scss */
 .home_link {
   color: #333333; }
 
-/* line 49, app/styles/main.scss */
+/* line 48, app/styles/main.scss */
 .home_link :visited {
   color: #333333; }
 
-/* line 52, app/styles/main.scss */
+/* line 51, app/styles/main.scss */
 .question_text {
   margin: 5px;
   padding: 10px;
@@ -62,10 +61,10 @@ body {
   -khtml-border-radius: 10px;
   word-wrap: break-word; }
 
-/* line 63, app/styles/main.scss */
+/* line 62, app/styles/main.scss */
 .answer_holder {
   margin-bottom: 10px; }
-/* line 66, app/styles/main.scss */
+/* line 65, app/styles/main.scss */
 .answer_holder .inside {
   padding: 10px;
   min-height: 4em;
@@ -75,21 +74,21 @@ body {
   word-wrap: break-word;
   cursor: pointer; }
 
-/* line 79, app/styles/main.scss */
+/* line 78, app/styles/main.scss */
 .question_select {
   margin: 5px; }
 
-/* line 84, app/styles/main.scss */
+/* line 83, app/styles/main.scss */
 .start_hidden {
   display: none; }
 
-/* line 91, app/styles/main.scss */
+/* line 90, app/styles/main.scss */
 .shrink_image {
   max-width: 100%;
   max-height: 100%; }
 
-/* line 96, app/styles/main.scss */
-.bottomer {
-  position: absolute;
-  bottom: 0;
-  padding: 30px; }
+/* line 95, app/styles/main.scss */
+.credits {
+  margin-top: 20px;
+  color: grey;
+  font-size: 75%; }

@@ -2,7 +2,6 @@ $icon-font-path: "../fonts/";
 
 body {
     background-color: #EEEEEE;
-    height: 100%;
 }
 .header{
     // background-color: #CCFFFF;
@@ -93,8 +92,8 @@ body {
     max-height:100%;
 }
 
-.bottomer {
-    position:absolute;
-    bottom:0;
-    padding:30px;
+.credits {
+    margin-top:20px;
+    color: grey;
+    font-size: 75%;
 }

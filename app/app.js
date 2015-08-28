@@ -190,6 +190,9 @@ class Base extends React.Component{
 										<li>Tier 4 - All of the above but includes night, change in physical appearance and loss of motor function</li>
 										<li>Tier 5 - Activities of Daily Living add to pain and little ability to complete tasks, continuous pain, obvious physical changes</li>
 									</ul>
+									<p className="credits">
+									Adapted From: Fry, Hunter J. H. “Overuse Syndrome of the Upper Limb in Musicians.” The Medical Journal of Australia 144, no. 4 (1986): 182-185; Fry, Hunter J. H, “Overuse Syndrome in Musicians: Prevention and Management.” The Lancet 328, Issue 8509 (1986): 728-731; and Fry, H. J. H. “The Treatment of Overuse Syndrome in Musicians.” Journal of The Royal Society of Medicine 81 no. 10 (1988): 572-575.
+									</p>
 								</Row>:undefined}
 								{(this.state.current_question.image_url)?
 									<Row className="card seperate">
@@ -214,9 +217,6 @@ class Base extends React.Component{
 					</Col>
 					<Col className="hidden-xs hidden-" sm={1} hidden-xs fluid/>
 				</Row>
-				<Col className="bottomer">
-					Adapted From: Fry, Hunter J. H. “Overuse Syndrome of the Upper Limb in Musicians.” The Medical Journal of Australia 144, no. 4 (1986): 182-185; Fry, Hunter J. H, “Overuse Syndrome in Musicians: Prevention and Management.” The Lancet 328, Issue 8509 (1986): 728-731; and Fry, H. J. H. “The Treatment of Overuse Syndrome in Musicians.” Journal of The Royal Society of Medicine 81 no. 10 (1988): 572-575.
-				</Col>
 			</Grid>
 		);
 	}

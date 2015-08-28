@@ -276,14 +276,14 @@ var Questions = {
 		N4_a: new ListQuestion('To what degree?', sections.NEURAL, ['Little', 'Some', 'a moderate degree', 'a significant degree'], 'N5'),
 	
 	N5: new BoolQuestion('Have you experienced a phenomenon where passages previously non-problematic are becoming inexplicably more difficult?', sections.NEURAL, function (answer){
-		return (answer === true)?'N5_a':'N6'}, false, null, doesnt_play([Brass])),
+		return (answer === true)?'N5_a':'N5b'}, false, null, doesnt_play([Brass])),
 		
 		N5_a: new BoolQuestion('Has this phenomenon become more frequent as time has gone on?', sections.NEURAL, 'N5_b'),
 		N5_b: new BoolQuestion('Has increasing practice time helped?', sections.NEURAL, 'N5_c'),
 		N5_c: new BoolQuestion('Has taking time off helped?', sections.NEURAL, 'N5_d'),
-		N5_d: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N5_e'),
-		N5_e: new BoolQuestion('Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer){
-			return (answer === true)?'N5_f':'N5_i'}, false, null, does_play([Brass])),
+		N5_d: new BoolQuestion('Do you experience pain during these episodes of inexplicable difficulty?', sections.NEURAL, 'N6'),
+	N5b: new BoolQuestion('Have you noticed a particular register in which it is becoming inexplicably more difficult to play?', sections.NEURAL, function (answer){
+			return (answer === true)?'N5_f':'N6'}, false, null, does_play([Brass])),
 		N5_f: new BoolQuestion('Has this phenomenon become more frequent as time has gone on?', sections.NEURAL, 'N5_g'),
 		N5_g: new BoolQuestion('Has increasing practice time helped?', sections.NEURAL, 'N5_h'),
 		N5_h: new BoolQuestion('Has taking time off helped?', sections.NEURAL, 'N5_i'),
