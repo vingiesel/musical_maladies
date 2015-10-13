@@ -1,6 +1,6 @@
 import React from 'react';
 import Bootstrap from 'react-bootstrap';
-var {Grid, Col, Row, Input, Button, ButtonGroup} = Bootstrap;
+var {Grid, Col, Row, Input, Button, ButtonGroup, ProgressBar} = Bootstrap;
 
 import $ from 'jquery';
 import _ from 'lodash';
@@ -109,6 +109,17 @@ class Base extends React.Component{
 		return Object.keys(Question.list).filter(function(key) {return Question.list[key] === question})[0]
 	}
 
+	getProgress = () =>{
+		var current_name = _.findKey(Question.list, (item)=>{
+			return _.isEqual(item, this.state.current_question);
+		});
+		var key_list = _.keys(Question.list);
+		var total = key_list.length;
+
+		var at = _.indexOf(key_list, current_name);
+		return (at / total) * 100;
+	}
+
 	render () {
 		var counter = 0;
 		var history_links = this.state.answers.map(function (item) {
@@ -128,6 +139,10 @@ class Base extends React.Component{
 			var data = item.custom?item.custom(answers_dict):item;
 			return <DiagnosisPanel key={JSON.stringify(data)} data={data} />
 		});
+
+		var progress = this.getProgress();
+
+		console.log(progress);
 
 		return (
 			<Grid className="background" fluid>
@@ -149,6 +164,10 @@ class Base extends React.Component{
 						<Row>
 							<Col className='card commands'>
 								<Row ref="controls">
+									<Col xs={12}>
+										<ProgressBar now={progress}></ProgressBar>
+									</Col>
+
 									<Col className="centered visible-xs" xs={4}>
 									<a className="home_link" onClick={this.onBack} href="javascript:void(0)">Previous</a>
 									</Col>
