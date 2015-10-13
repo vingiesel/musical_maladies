@@ -29277,7 +29277,7 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 								React.createElement(
 									Col,
 									{ xs: 4 },
-									'Musical Maladies'
+									'Painless Musician Quiz'
 								),
 								React.createElement(
 									Col,

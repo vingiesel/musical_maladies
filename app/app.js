@@ -147,7 +147,7 @@ class Base extends React.Component{
 		return (
 			<Grid className="background" fluid>
 				<Row className="header">
-					<Col xs={4}>Musical Maladies</Col>
+					<Col xs={4}>Painless Musician Quiz</Col>
 
 					<Col className="hidden-xs centered" sm={4}>
 						<a className="home_link" href="//google.com"><i className="fa fa-home"/> Home</a>
