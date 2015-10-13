@@ -29084,7 +29084,7 @@ System.register('app/QuestionPanel', ['npm:babel-runtime@5.4.7/helpers/inherits'
 	};
 });
 System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:babel-runtime@5.4.7/helpers/get', 'npm:babel-runtime@5.4.7/helpers/create-class', 'npm:babel-runtime@5.4.7/helpers/class-call-check', 'npm:babel-runtime@5.4.7/core-js/object/keys', 'npm:react@0.13.3', 'npm:react-bootstrap@0.24.0-alpha.0', 'github:components/jquery@2.1.4', 'npm:lodash@3.9.3', 'npm:store2@2.3.0', 'app/QuestionPanel', 'app/AnswerPanel', 'app/DiagnosisPanel', 'app/questions', 'app/diagnosis'], function (_export) {
-	var _inherits, _get, _createClass, _classCallCheck, _Object$keys, React, Bootstrap, $, _, store, QuestionPanel, AnswerPanel, DiagnosisPanel, Question, Diagnosis, Grid, Col, Row, Input, Button, ButtonGroup, Base;
+	var _inherits, _get, _createClass, _classCallCheck, _Object$keys, React, Bootstrap, $, _, store, QuestionPanel, AnswerPanel, DiagnosisPanel, Question, Diagnosis, Grid, Col, Row, Input, Button, ButtonGroup, ProgressBar, Base;
 
 	return {
 		setters: [function (_npmBabelRuntime547HelpersInherits) {
@@ -29127,6 +29127,7 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 			Input = Bootstrap.Input;
 			Button = Bootstrap.Button;
 			ButtonGroup = Bootstrap.ButtonGroup;
+			ProgressBar = Bootstrap.ProgressBar;
 
 			Base = (function (_React$Component) {
 				function Base(props) {
@@ -29217,6 +29218,17 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 						})[0];
 					};
 
+					this.getProgress = function () {
+						var current_name = _.findKey(Question.list, function (item) {
+							return _.isEqual(item, _this.state.current_question);
+						});
+						var key_list = _.keys(Question.list);
+						var total = key_list.length;
+
+						var at = _.indexOf(key_list, current_name);
+						return at / total * 100;
+					};
+
 					// var default_answers = store.get('history_answers', []);
 					// var default_start = store.get('history_start', Question.first) || Question.first;
 
@@ -29251,6 +29263,10 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 							var data = item.custom ? item.custom(answers_dict) : item;
 							return React.createElement(DiagnosisPanel, { key: JSON.stringify(data), data: data });
 						});
+
+						var progress = this.getProgress();
+
+						console.log(progress);
 
 						return React.createElement(
 							Grid,
@@ -29317,6 +29333,11 @@ System.register('app/app', ['npm:babel-runtime@5.4.7/helpers/inherits', 'npm:bab
 											React.createElement(
 												Row,
 												{ ref: 'controls' },
+												React.createElement(
+													Col,
+													{ xs: 12 },
+													React.createElement(ProgressBar, { now: progress })
+												),
 												React.createElement(
 													Col,
 													{ className: 'centered visible-xs', xs: 4 },
