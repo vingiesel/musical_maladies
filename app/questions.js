@@ -156,14 +156,7 @@ var Questions = {
 			}
 		}),
 	Q3_a : new BoolQuestion('Was it a decrease or an increase in physical activity?', sections.QUAL, 'Q4', false, null, null, ['Decrease', 'Increase']),
-	Q4 : new BoolQuestion('Have you noticed anything visibly different in the troublesome area since the pain has begun?', sections.QUAL, function (answer, answers, skip){
-			if (answer || skip){
-				return 'Q4_a';
-			}else{
-				return 'Q5';
-			}
-		}, false, null, null, ['Slight', 'Extreme']),
-	Q4_a : new ListQuestion('Do you notice a slight difference or an extreme difference?', sections.QUAL, ['Slight', 'Extreme'], 'Q5'),
+	Q4 : new MultiQuestion('Have you noticed anything visibly different in the troublesome area since the pain has begun?', sections.QUAL, ['Slight', 'Extreme'], 'Q5'),
 	Q5 : new BoolQuestion('Is your pain related only to a specific passage?', sections.QUAL, function (answer, answers, skip){
 			if (answer || skip){
 				return 'N1';
